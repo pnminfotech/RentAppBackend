@@ -21,10 +21,10 @@ const getLogin = async (req, res) => {
           message: "Logged In Successfully ! ",
         });
       } else {
-        res.status(401).json({ status: false, message: "Wrong Password !" });
+        res.status(200).json({ status: false, message: "Wrong Password !" });
       }
     } else {
-      res.status(401).json({ status: false, message: "Wrong Login Id !" });
+      res.status(200).json({ status: false, message: "Wrong Login Id !" });
     }
   } catch (error) {
     console.log(error);
