@@ -35,7 +35,6 @@ const getLogin = async (req, res) => {
 };
 
 const distributeItem = async (req, res) => {
-  console.log(req.files);
   try {
     const {
       employeeId,
