@@ -34,4 +34,43 @@ const getLogin = async (req, res) => {
   }
 };
 
-module.exports = { getLogin };
+const distributeItem = async (req, res) => {
+  console.log(req.files);
+  try {
+    const {
+      employeeId,
+      department,
+      firstName,
+      lastName,
+      gender,
+      joiningDate,
+      phoneNumber,
+      address,
+    } = req.body;
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Distribution");
+
+    const distribute = {
+      employeeId: employeeId,
+      department: department,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      joiningDate: joiningDate,
+      phoneNumber: phoneNumber,
+      address: address,
+    };
+    const distributed = await collection.insertOne(distribute);
+    if (distributed) {
+      res.status(201).json({ message: "Item distributed" });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+};
+
+module.exports = { getLogin, distributeItem };
