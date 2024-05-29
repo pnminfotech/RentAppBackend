@@ -35,6 +35,7 @@ const getLogin = async (req, res) => {
 };
 
 const distributeItem = async (req, res) => {
+  console.log(req.body);
   try {
     const {
       employeeId,
@@ -46,6 +47,7 @@ const distributeItem = async (req, res) => {
       phoneNumber,
       address,
     } = req.body;
+    console.log(firstName);
     const cl = await client.connect();
     const db = cl.db("StockManagementSystem");
     const collection = db.collection("Distribution");
@@ -62,6 +64,7 @@ const distributeItem = async (req, res) => {
     };
     const distributed = await collection.insertOne(distribute);
     if (distributed) {
+      console.log(req.body);
       res.status(201).json({ message: "Item distributed" });
     } else {
       res.status(500).json({ error: "Internal server error" });
