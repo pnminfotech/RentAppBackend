@@ -75,4 +75,20 @@ const distributeItem = async (req, res) => {
   }
 };
 
-module.exports = { getLogin, distributeItem };
+const getInventories = async (req, res) => {
+  try {
+    console.log("hii");
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Inventories");
+    const Inventories = await collection.find().toArray();
+    if (Inventories) {
+      res.status(200).send(Inventories);
+    } else {
+      res.status(500).send("Internal Server Error");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+module.exports = { getLogin, distributeItem, getInventories };
