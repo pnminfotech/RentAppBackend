@@ -1,4 +1,5 @@
 // login
+const { ObjectId } = require("mongodb");
 const { client } = require("../config/connection");
 
 const getLogin = async (req, res) => {
@@ -116,4 +117,38 @@ const addInventory = async (req, res) => {
     res.send(error);
   }
 };
-module.exports = { getLogin, distributeItem, getInventories, addInventory };
+
+const deleteInventory = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log(id);
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send("Invalid ID format");
+    }
+
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Inventories");
+
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    console.log(result);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).send("Id Not Found in Database");
+    }
+
+    res.status(200).send({ message: "Inventory deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports = {
+  getLogin,
+  distributeItem,
+  getInventories,
+  addInventory,
+  deleteInventory,
+};
