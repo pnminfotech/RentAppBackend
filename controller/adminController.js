@@ -91,4 +91,29 @@ const getInventories = async (req, res) => {
     console.log(error);
   }
 };
-module.exports = { getLogin, distributeItem, getInventories };
+
+const addInventory = async (req, res) => {
+  console.log(req.body);
+  try {
+    const { firstName } = req.body;
+    console.log(firstName);
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Inventories");
+
+    const inventory = {
+      firstName: firstName,
+    };
+    const addinventoryquery = await collection.insertOne(inventory);
+    if (addinventoryquery) {
+      console.log(req.body);
+      res.status(201).json({ message: "Inventory Added" });
+    } else {
+      res.status(500).json({ error: "Internal server error" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+};
+module.exports = { getLogin, distributeItem, getInventories, addInventory };
