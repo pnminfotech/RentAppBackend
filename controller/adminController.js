@@ -1,4 +1,6 @@
 // login
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const { ObjectId } = require("mongodb");
 const { client } = require("../config/connection");
 
@@ -145,10 +147,116 @@ const deleteInventory = async (req, res) => {
   }
 };
 
+const requestPasswordReset = async (req, res) => {
+  try {
+    const { emailId } = req.body;
+
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Login");
+
+    const user = await collection.findOne({ emailId: emailId });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "User Not Found!" });
+    }
+
+    const token = crypto.randomBytes(20).toString("hex");
+
+    const tokenExpiration = Date.now() + 3600000; // 1 hour from now
+
+    await collection.updateOne(
+      { emailId: emailId },
+      {
+        $set: {
+          resetPasswordToken: token,
+          resetPasswordExpires: tokenExpiration,
+        },
+      }
+    );
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      host: "smtp.gmail.com",
+      auth: {
+        user: "akshatabhimnale99@gmail.com",
+        pass: "agku vsci qcat pkxp",
+      },
+    });
+
+    const mailOptions = {
+      to: emailId,
+      from: process.env.EMAIL,
+      subject: "Password Reset",
+      text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+        Please click on the following link, or paste this into your browser to complete the process:\n\n
+        http://${req.headers.host}/reset-password/${token}\n\n
+        If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+    };
+
+    transporter.sendMail(mailOptions, (err) => {
+      if (err) {
+        return res.status(500).json({
+          status: "error",
+          message: "Error sending email. Error :" + err,
+        });
+      }
+      res
+        .status(200)
+        .json({ status: "success", message: "Password reset link sent!" });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Login");
+
+    const user = await collection.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Password reset token is invalid or has expired.",
+      });
+    }
+
+    await collection.updateOne(
+      { _id: user._id },
+      {
+        $set: { password: newPassword },
+        $unset: { resetPasswordToken: "", resetPasswordExpires: "" },
+      }
+    );
+
+    res
+      .status(200)
+      .json({ status: "success", message: "Password has been updated!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   getLogin,
   distributeItem,
   getInventories,
   addInventory,
   deleteInventory,
+  requestPasswordReset,
+  resetPassword,
 };
