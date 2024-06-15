@@ -185,7 +185,7 @@ const requestPasswordReset = async (req, res) => {
         pass: "agku vsci qcat pkxp",
       },
     });
-    const resetLink = `exp://192.168.0.71:8081/reset-password/${token}`;
+    const resetLink = `192.168.0.71:8081/reset-password/${token}`;
     const mailOptions = {
       to: emailId,
       from: process.env.EMAIL,
