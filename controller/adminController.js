@@ -37,56 +37,14 @@ const getLogin = async (req, res) => {
   }
 };
 
-const distributeItem = async (req, res) => {
-  console.log(req.body);
+const getBuildings = async (req, res) => {
   try {
-    const {
-      employeeId,
-      department,
-      firstName,
-      lastName,
-      gender,
-      joiningDate,
-      phoneNumber,
-      address,
-    } = req.body;
-    console.log(firstName);
     const cl = await client.connect();
     const db = cl.db("StockManagementSystem");
-    const collection = db.collection("Distribution");
-
-    const distribute = {
-      employeeId: employeeId,
-      department: department,
-      firstName: firstName,
-      lastName: lastName,
-      gender: gender,
-      joiningDate: joiningDate,
-      phoneNumber: phoneNumber,
-      address: address,
-    };
-    const distributed = await collection.insertOne(distribute);
-    if (distributed) {
-      console.log(req.body);
-      res.status(201).json({ message: "Item distributed" });
-    } else {
-      res.status(500).json({ error: "Internal server error" });
-    }
-  } catch (error) {
-    console.log(error);
-    res.send(error);
-  }
-};
-
-const getInventories = async (req, res) => {
-  try {
-    console.log("hii");
-    const cl = await client.connect();
-    const db = cl.db("StockManagementSystem");
-    const collection = db.collection("Inventories");
-    const Inventories = await collection.find().toArray();
-    if (Inventories) {
-      res.status(200).send(Inventories);
+    const collection = db.collection("Buildings");
+    const totalBuildings = await collection.countDocuments();
+    if (totalBuildings) {
+      res.status(201).send({ totalBuildings });
     } else {
       res.status(500).send("Internal Server Error");
     }
@@ -95,57 +53,203 @@ const getInventories = async (req, res) => {
   }
 };
 
-const addInventory = async (req, res) => {
-  console.log(req.body);
+const getFlats = async (req, res) => {
   try {
-    const { firstName } = req.body;
-    console.log(firstName);
     const cl = await client.connect();
     const db = cl.db("StockManagementSystem");
-    const collection = db.collection("Inventories");
-
-    const inventory = {
-      firstName: firstName,
-    };
-    const addinventoryquery = await collection.insertOne(inventory);
-    if (addinventoryquery) {
-      console.log(req.body);
-      res.status(201).json({ message: "Inventory Added" });
+    const collection = db.collection("Flats");
+    const totalFlats = await collection.countDocuments();
+    if (totalFlats) {
+      res.status(201).send({ totalFlats });
     } else {
-      res.status(500).json({ error: "Internal server error" });
+      res.status(500).send("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
-    res.send(error);
   }
 };
 
-const deleteInventory = async (req, res) => {
+const getEmptyFlats = async (req, res) => {
   try {
-    const id = req.params.id;
-    console.log(id);
-
-    if (!ObjectId.isValid(id)) {
-      return res.status(400).send("Invalid ID format");
-    }
-
     const cl = await client.connect();
     const db = cl.db("StockManagementSystem");
-    const collection = db.collection("Inventories");
-
-    const result = await collection.deleteOne({ _id: new ObjectId(id) });
-    console.log(result);
-
-    if (result.deletedCount === 0) {
-      return res.status(404).send("Id Not Found in Database");
+    const collection = db.collection("Flats");
+    const noOfFlatsEmpty = await collection.countDocuments({
+      rental_status: "False",
+    });
+    if (noOfFlatsEmpty) {
+      res.status(201).send({ noOfFlatsEmpty });
+    } else {
+      res.status(500).send("Internal Server Error");
     }
-
-    res.status(200).send({ message: "Inventory deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
+    console.log(error);
   }
 };
+
+const getFlatsOnRent = async (req, res) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Flats");
+    const noOfFlatsOnRent = await collection.countDocuments({
+      rental_status: "True",
+    });
+    if (noOfFlatsOnRent) {
+      res.status(201).send({ noOfFlatsOnRent });
+    } else {
+      res.status(500).send("Internal Server Error");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getRentReceived = async (req, res) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Flats");
+    const noOfFlatsRentReceived = await collection.countDocuments({
+      monthly_rent_recieved: "True",
+    });
+    if (noOfFlatsRentReceived) {
+      res.status(201).send({ noOfFlatsRentReceived });
+    } else {
+      res.status(500).send("Internal Server Error");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getRentPending = async (req, res) => {
+  try {
+    const cl = await client.connect();
+    const db = cl.db("StockManagementSystem");
+    const collection = db.collection("Flats");
+    const noOfFlatsRentPending = await collection.countDocuments({
+      monthly_rent_recieved: "False",
+    });
+    if (noOfFlatsRentPending) {
+      res.status(201).send({ noOfFlatsRentPending });
+    } else {
+      res.status(500).send("Internal Server Error");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// const distributeItem = async (req, res) => {
+//   console.log(req.body);
+//   try {
+//     const {
+//       employeeId,
+//       department,
+//       firstName,
+//       lastName,
+//       gender,
+//       joiningDate,
+//       phoneNumber,
+//       address,
+//     } = req.body;
+//     console.log(firstName);
+//     const cl = await client.connect();
+//     const db = cl.db("StockManagementSystem");
+//     const collection = db.collection("Distribution");
+
+//     const distribute = {
+//       employeeId: employeeId,
+//       department: department,
+//       firstName: firstName,
+//       lastName: lastName,
+//       gender: gender,
+//       joiningDate: joiningDate,
+//       phoneNumber: phoneNumber,
+//       address: address,
+//     };
+//     const distributed = await collection.insertOne(distribute);
+//     if (distributed) {
+//       console.log(req.body);
+//       res.status(201).json({ message: "Item distributed" });
+//     } else {
+//       res.status(500).json({ error: "Internal server error" });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.send(error);
+//   }
+// };
+
+// const getInventories = async (req, res) => {
+//   try {
+//     console.log("hii");
+//     const cl = await client.connect();
+//     const db = cl.db("StockManagementSystem");
+//     const collection = db.collection("Inventories");
+//     const Inventories = await collection.find().toArray();
+//     if (Inventories) {
+//       res.status(200).send(Inventories);
+//     } else {
+//       res.status(500).send("Internal Server Error");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// const addInventory = async (req, res) => {
+//   console.log(req.body);
+//   try {
+//     const { firstName } = req.body;
+//     console.log(firstName);
+//     const cl = await client.connect();
+//     const db = cl.db("StockManagementSystem");
+//     const collection = db.collection("Inventories");
+
+//     const inventory = {
+//       firstName: firstName,
+//     };
+//     const addinventoryquery = await collection.insertOne(inventory);
+//     if (addinventoryquery) {
+//       console.log(req.body);
+//       res.status(201).json({ message: "Inventory Added" });
+//     } else {
+//       res.status(500).json({ error: "Internal server error" });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.send(error);
+//   }
+// };
+
+// const deleteInventory = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     console.log(id);
+
+//     if (!ObjectId.isValid(id)) {
+//       return res.status(400).send("Invalid ID format");
+//     }
+
+//     const cl = await client.connect();
+//     const db = cl.db("StockManagementSystem");
+//     const collection = db.collection("Inventories");
+
+//     const result = await collection.deleteOne({ _id: new ObjectId(id) });
+//     console.log(result);
+
+//     if (result.deletedCount === 0) {
+//       return res.status(404).send("Id Not Found in Database");
+//     }
+
+//     res.status(200).send({ message: "Inventory deleted successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 
 const requestPasswordReset = async (req, res) => {
   try {
@@ -253,10 +357,16 @@ const resetPassword = async (req, res) => {
 
 module.exports = {
   getLogin,
-  distributeItem,
-  getInventories,
-  addInventory,
-  deleteInventory,
+  // distributeItem,
+  // getInventories,
+  // addInventory,
+  // deleteInventory,
   requestPasswordReset,
   resetPassword,
+  getBuildings,
+  getFlats,
+  getFlatsOnRent,
+  getEmptyFlats,
+  getRentReceived,
+  getRentPending,
 };
