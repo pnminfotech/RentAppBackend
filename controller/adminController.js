@@ -130,6 +130,7 @@ const getRentPending = async (req, res) => {
     const collection = db.collection("Flats");
     const noOfFlatsRentPending = await collection.countDocuments({
       monthly_rent_recieved: "False",
+      rental_status: "True",
     });
     if (noOfFlatsRentPending) {
       res.status(201).send({ noOfFlatsRentPending });
