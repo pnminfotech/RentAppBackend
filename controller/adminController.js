@@ -138,11 +138,11 @@ const getRentPending = async (req, res) => {
     });
 
     // Send the count of flats with rent pending, even if it is zero
-    res.status(200).json({ noOfFlatsRentPending });
+    res.status(200).send({ noOfFlatsRentPending });
   } catch (error) {
     // Log error and send a 500 status code with an error message
     console.error("Error fetching rent pending flats:", error);
-    res.status(500).json({ status: "error", message: "Internal Server Error" });
+    res.status(500).send({ status: "error", message: "Internal Server Error" });
   } finally {
     // Ensure the MongoDB client is closed
     if (cl) {
