@@ -124,21 +124,34 @@ const getRentReceived = async (req, res) => {
 };
 
 const getRentPending = async (req, res) => {
+  let cl;
   try {
-    const cl = await client.connect();
+    // Connect to the MongoDB client
+    cl = await client.connect();
     const db = cl.db("StockManagementSystem");
     const collection = db.collection("Flats");
+
+    // Count documents where monthly_rent_recieved is "False" and rental_status is "True"
     const noOfFlatsRentPending = await collection.countDocuments({
       monthly_rent_recieved: "False",
       rental_status: "True",
     });
-    if (noOfFlatsRentPending) {
-      res.status(201).send({ noOfFlatsRentPending });
-    } else {
-      res.status(500).send("Internal Server Error");
-    }
+
+    // Send the count of flats with rent pending, even if it is zero
+    res.status(200).json({ noOfFlatsRentPending });
   } catch (error) {
-    console.log(error);
+    // Log error and send a 500 status code with an error message
+    console.error("Error fetching rent pending flats:", error);
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
+  } finally {
+    // Ensure the MongoDB client is closed
+    if (cl) {
+      try {
+        await cl.close();
+      } catch (closeError) {
+        console.error("Error closing MongoDB connection:", closeError);
+      }
+    }
   }
 };
 
