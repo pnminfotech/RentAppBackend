@@ -37,7 +37,7 @@ const getLogin = async (req, res) => {
   }
 };
 
-const getBuildings = async (req, res) => {
+const getSocieties = async (req, res) => {
   try {
     const cl = await client.connect();
     const db = cl.db("StockManagementSystem");
@@ -377,7 +377,7 @@ module.exports = {
   // deleteInventory,
   requestPasswordReset,
   resetPassword,
-  getBuildings,
+  getSocieties,
   getFlats,
   getFlatsOnRent,
   getEmptyFlats,

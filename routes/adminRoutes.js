@@ -9,7 +9,7 @@ const {
   // deleteInventory,
   requestPasswordReset,
   resetPassword,
-  getBuildings,
+  getSocieties,
   getFlats,
   getFlatsOnRent,
   getEmptyFlats,
@@ -18,7 +18,7 @@ const {
 } = require("../controller/adminController");
 
 router.route("/login").post(getLogin);
-router.route("/get-buildings").get(getBuildings);
+router.route("/get-societies").get(getSocieties);
 router.route("/get-flats").get(getFlats);
 router.route("/get-flatsOnRent").get(getFlatsOnRent);
 router.route("/get-empty-flats").get(getEmptyFlats);
