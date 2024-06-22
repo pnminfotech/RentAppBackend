@@ -1,19 +1,25 @@
+const mongoose = require("mongoose");
 const { MongoClient } = require("mongodb");
-
-const uri =
-  "mongodb+srv://akshatabhimnale:RadheKrishna$$12@cluster0.k4yrvjb.mongodb.net/";
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-async function connectToMongoDB() {
+const connectToMongoDB = async () => {
   try {
-    await client.connect();
-    console.log("Connected to MongoDB Atlas");
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    const conn = await mongoose.connect(
+      "mongodb+srv://akshatabhimnale:RadheKrishna$$12@cluster0.k4yrvjb.mongodb.net/StockManagementSystem",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(`Error connecting to MongoDB: ${err.message}`);
+    process.exit(1);
   }
-}
-
+};
+const client = new MongoClient(
+  "mongodb+srv://akshatabhimnale:RadheKrishna$$12@cluster0.k4yrvjb.mongodb.net/StockManagementSystem",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 module.exports = { connectToMongoDB, client };

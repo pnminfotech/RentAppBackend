@@ -1,6 +1,5 @@
 const Society = require("../models/Society");
 
-// Get all societies
 exports.getAllSocieties = async (req, res) => {
   try {
     const societies = await Society.find();
@@ -10,7 +9,6 @@ exports.getAllSocieties = async (req, res) => {
   }
 };
 
-// Get society by ID
 exports.getSocietyById = async (req, res) => {
   try {
     const society = await Society.findById(req.params.id);
@@ -24,12 +22,10 @@ exports.getSocietyById = async (req, res) => {
   }
 };
 
-// Create a new society
 exports.createSociety = async (req, res) => {
   const society = new Society({
     name: req.body.name,
     address: req.body.address,
-    // Add more fields as needed
   });
 
   try {
@@ -40,7 +36,6 @@ exports.createSociety = async (req, res) => {
   }
 };
 
-// Update an existing society
 exports.updateSociety = async (req, res) => {
   try {
     const society = await Society.findById(req.params.id);
@@ -48,7 +43,6 @@ exports.updateSociety = async (req, res) => {
     if (society) {
       society.name = req.body.name || society.name;
       society.address = req.body.address || society.address;
-      // Update more fields as needed
 
       const updatedSociety = await society.save();
       res.json(updatedSociety);
@@ -60,7 +54,6 @@ exports.updateSociety = async (req, res) => {
   }
 };
 
-// Delete a society
 exports.deleteSociety = async (req, res) => {
   try {
     const society = await Society.findById(req.params.id);
