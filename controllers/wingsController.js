@@ -1,4 +1,4 @@
-const Society = require("../models/Society");
+const Wings = require("../models/Wings");
 
 exports.getAllWings = async (req, res) => {
   try {
