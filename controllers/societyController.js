@@ -59,7 +59,7 @@ exports.deleteSociety = async (req, res) => {
     const society = await Society.findById(req.params.id);
 
     if (society) {
-      await society.remove();
+      await society.deleteOne();
       res.json({ message: "Society deleted" });
     } else {
       res.status(404).json({ message: "Society not found" });
