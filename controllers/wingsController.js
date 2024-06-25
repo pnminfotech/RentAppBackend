@@ -24,8 +24,7 @@ exports.getWingById = async (req, res) => {
 
 exports.createWing = async (req, res) => {
   const wing = new Wings({
-    name: req.body.name,
-    address: req.body.address,
+    name: req.body.name
   });
 
   try {
