@@ -1,4 +1,4 @@
-const Wings = require("../models/Wings");
+const Wings = require("../models/Wing");
 
 exports.getAllWings = async (req, res) => {
   try {
@@ -24,10 +24,16 @@ exports.getWingById = async (req, res) => {
 
 exports.createWing = async (req, res) => {
   const wing = new Wings({
-    name: req.body.name
+    name: req.body.name,
+    society_id: req.body.society_id,
   });
 
   try {
+    const isexists = await Wings.findOne( {name:req.body.name,society_id:req.body.society_id});
+    if (isexists) {
+      return res.status(404).json({ message: "Wing name is allready exists " });
+    }
+   
     const newWing = await wing.save();
     res.status(201).json(newWing);
   } catch (err) {
@@ -41,7 +47,6 @@ exports.updateWing = async (req, res) => {
 
     if (wing) {
       wing.name = req.body.name || wing.name;
-      wing.address = req.body.address || wing.address;
 
       const updatedWing = await wing.save();
       res.json(updatedWing);
