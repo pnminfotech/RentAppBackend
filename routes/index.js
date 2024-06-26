@@ -7,6 +7,7 @@ const wingRoutes = require("./wingRoutes")
 const adminRoutes = require("./adminRoutes");
 const flatRoutes = require("./flatRoutes");
 const tenantRoutes = require("./tenantRoutes");
+const adminRoutes = require("./adminRoutes")
 
 // Define routes
 router.use("/societies", societyRoutes);

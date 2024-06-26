@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 connectToMongoDB();
 
 // Define your API routes here
+
 app.use("/api/", routes);
 
 app.listen(port, () => {
