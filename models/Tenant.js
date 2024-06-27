@@ -26,7 +26,8 @@ const tenantsSchema = new mongoose.Schema(
     reference_person1_age: { type: Number, required: true },
     reference_person2_age: { type: Number, required: true },
     agent_name: { type: String, required: true },
-    flat_id: { type: mongoose.Schema.Types.ObjectId, ref: "Flats", required: true }, // Add reference to Society
+    flat_id: { type: mongoose.Schema.Types.ObjectId, ref: "Flats", required: true },
+    rent_status:{type:String, required:true} // Add reference to Society
   },
   {
     collection: "Tenants", // Update the collection name to "Flat"
