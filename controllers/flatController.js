@@ -11,7 +11,7 @@ exports.getAllFlats = async (req, res) => {
 
 exports.getCountFlats = async (req, res) => {
   try {
-    const flats = await Flat.find();
+    const flats = await Flats.find();
     res.json({ totalFlats: flats.length });
   } catch (error) {
     console.error(error);
@@ -21,7 +21,7 @@ exports.getCountFlats = async (req, res) => {
 
 exports.getRentedFlats = async (req, res) => {
   try {
-    const flatsOnRent = await Flat.find({ flat_status: 'occupied' });
+    const flatsOnRent = await Flats.find({ flat_status: 'occupied' });
     res.json({ noOfFlatsOnRent: flatsOnRent.length });
   } catch (error) {
     console.error(error);
