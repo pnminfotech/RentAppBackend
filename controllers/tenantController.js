@@ -11,8 +11,8 @@ exports.getAllTenants = async (req, res) => {
 
 exports.getAllRentReceivedTenants = async (req, res) => {
   try {
-    const tenantRentStatus = await Tenant.find({ rent_status: 'paid' });
-    res.json({ noOfFlatsOnRent: tenantRentStatus.length });
+    const tenantRentReceived = await Tenant.find({ rent_status: 'paid' });
+    res.json({ noOfFlatsRentReceived: tenantRentReceived.length });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
@@ -21,8 +21,8 @@ exports.getAllRentReceivedTenants = async (req, res) => {
 
 exports.getAllRentPendingTenants = async (req, res) => {
   try {
-    const tenantRentStatus = await Tenant.find({ rent_status: 'pending' });
-    res.json({ noOfFlatsOnRent: tenantRentStatus.length });
+    const tenantRentPending = await Tenant.find({ rent_status: 'pending' });
+    res.json({ noOfFlatsRentPending: tenantRentPending.length });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
