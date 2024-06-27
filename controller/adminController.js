@@ -44,9 +44,9 @@ const getSocieties = async (req, res) => {
     const collection = db.collection("Buildings");
     const totalBuildings = await collection.countDocuments();
     if (totalBuildings) {
-      res.status(201).send({ totalBuildings });
+      res.status(201).json({ totalBuildings });
     } else {
-      res.status(500).send("Internal Server Error");
+      res.status(500).json("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
@@ -60,9 +60,9 @@ const getFlats = async (req, res) => {
     const collection = db.collection("Flats");
     const totalFlats = await collection.countDocuments();
     if (totalFlats) {
-      res.status(201).send({ totalFlats });
+      res.status(201).json({ totalFlats });
     } else {
-      res.status(500).send("Internal Server Error");
+      res.status(500).json("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
@@ -78,9 +78,9 @@ const getEmptyFlats = async (req, res) => {
       rental_status: "False",
     });
     if (noOfFlatsEmpty) {
-      res.status(201).send({ noOfFlatsEmpty });
+      res.status(201).json({ noOfFlatsEmpty });
     } else {
-      res.status(500).send("Internal Server Error");
+      res.status(500).json("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
@@ -96,9 +96,9 @@ const getFlatsOnRent = async (req, res) => {
       rental_status: "True",
     });
     if (noOfFlatsOnRent) {
-      res.status(201).send({ noOfFlatsOnRent });
+      res.status(201).json({ noOfFlatsOnRent });
     } else {
-      res.status(500).send("Internal Server Error");
+      res.status(500).json("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
@@ -114,9 +114,9 @@ const getRentReceived = async (req, res) => {
       monthly_rent_recieved: "True",
     });
     if (noOfFlatsRentReceived) {
-      res.status(201).send({ noOfFlatsRentReceived });
+      res.status(201).json({ noOfFlatsRentReceived });
     } else {
-      res.status(500).send("Internal Server Error");
+      res.status(500).json("Internal Server Error");
     }
   } catch (error) {
     console.log(error);
@@ -138,11 +138,11 @@ const getRentPending = async (req, res) => {
     });
 
     // Send the count of flats with rent pending, even if it is zero
-    res.status(200).send({ noOfFlatsRentPending });
+    res.status(200).json({ noOfFlatsRentPending });
   } catch (error) {
     // Log error and send a 500 status code with an error message
     console.error("Error fetching rent pending flats:", error);
-    res.status(500).send({ status: "error", message: "Internal Server Error" });
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
   } finally {
     // Ensure the MongoDB client is closed
     if (cl) {
