@@ -9,6 +9,36 @@ exports.getAllFlats = async (req, res) => {
   }
 };
 
+exports.getCountFlats = async (req, res) => {
+  try {
+    const flats = await Flat.find();
+    res.json({ totalFlats: flats.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+exports.getRentedFlats = async (req, res) => {
+  try {
+    const flatsOnRent = await Flat.find({ flat_status: 'occupied' });
+    res.json({ noOfFlatsOnRent: flatsOnRent.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+exports.getVaccantFlats = async (req, res) => {
+  try {
+    const flatsOnRent = await Flat.find({ flat_status: 'vaccant' });
+    res.json({ noOfFlatsOnRent: flatsOnRent.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
 exports.getFlatById = async (req, res) => {
   try {
     const flat = await Flats.findById(req.params.id);

@@ -3,6 +3,7 @@ const router = express.Router();
 const societyController = require("../controllers/societyController");
 
 router.get("/", societyController.getAllSocieties);
+router.get("/count", societyController.getCountSocieties);
 router.get("/:id", societyController.getSocietyById);
 router.post("/", societyController.createSociety);
 router.put("/:id", societyController.updateSociety);

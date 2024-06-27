@@ -9,6 +9,16 @@ exports.getAllSocieties = async (req, res) => {
   }
 };
 
+exports.getCountSocieties = async (req, res) => {
+  try {
+    const societies = await Society.find();
+    res.json({ totalSocieties: societies.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
 exports.getSocietyById = async (req, res) => {
   try {
     const society = await Society.findById(req.params.id);

@@ -9,6 +9,26 @@ exports.getAllTenants = async (req, res) => {
   }
 };
 
+exports.getAllRentReceivedTenants = async (req, res) => {
+  try {
+    const tenantRentStatus = await Tenant.find({ rent_status: 'paid' });
+    res.json({ noOfFlatsOnRent: tenantRentStatus.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+exports.getAllRentPendingTenants = async (req, res) => {
+  try {
+    const tenantRentStatus = await Tenant.find({ rent_status: 'pending' });
+    res.json({ noOfFlatsOnRent: tenantRentStatus.length });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
 exports.getTenantById = async (req, res) => {
   try {
     const tenant = await Tenant.findById(req.params.id);
@@ -49,6 +69,7 @@ exports.createTenant = async (req, res) => {
     reference_person2_age: req.body.reference_person2_age,
     agent_name: req.body.agent_name,
     flat_id: req.body.flat_id,
+    rent_status:req.body.rent_status,
   });
 
   try {
@@ -89,6 +110,7 @@ exports.updateTenant = async (req, res) => {
       tenant.reference_person2_age = req.body.reference_person2_age || tenant.reference_person2_age;
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
+      tenant.rent_status - req.body.rent_status || tenant.rent_status;
 
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
