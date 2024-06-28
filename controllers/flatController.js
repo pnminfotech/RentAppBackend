@@ -52,6 +52,19 @@ exports.getFlatById = async (req, res) => {
   }
 };
 
+exports.getFlatsByWingsId = async (req, res) => {
+  try {
+    const flats_by_id = await Wings.find({wing_id:req.params.id});
+    if (flats_by_id) {
+      res.json(flats_by_id);
+    } else {
+      res.status(404).json({ message: "Wing not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.createFlat = async (req, res) => {
   const flat = new Flats({
     name: req.body.name,

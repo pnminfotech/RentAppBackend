@@ -7,6 +7,7 @@ router.get("/on-rent", FlatController.getRentedFlats);
 router.get("/vaccant", FlatController.getVaccantFlats);
 router.get("/count", FlatController.getCountFlats);
 router.get("/:id", FlatController.getFlatById);
+router.get("/flats-by-wings/:id", FlatController.getFlatsByWingsId);
 router.post("/", FlatController.createFlat);
 router.put("/:id", FlatController.updateFlat);
 router.delete("/:id", FlatController.deleteFlat);

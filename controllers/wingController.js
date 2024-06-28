@@ -22,6 +22,20 @@ exports.getWingById = async (req, res) => {
   }
 };
 
+exports.getWingBySocietyId = async (req, res) => {
+  try {
+    const wing_by_id = await Wings.find({society_id:req.params.id});
+    if (wing_by_id) {
+      res.json(wing_by_id);
+    } else {
+      res.status(404).json({ message: "Wing not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 exports.createWing = async (req, res) => {
   const wing = new Wings({
     name: req.body.name,
