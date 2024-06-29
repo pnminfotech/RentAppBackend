@@ -65,17 +65,18 @@ exports.getFlatsByWingsId = async (req, res) => {
   }
 };
 
-exports.createFlat = async (req, res) => {
+exports.createFlatByWingId = async (req, res) => {
   const flat = new Flats({
     name: req.body.name,
-    wing_id: req.body.wing_id,
+    wing_id: req.params.id,
+    flat_status:"vaccant",
   });
   try {
-    const isexists = await Flats.findOne( {name:req.body.name,wing_id:req.body.wing_id});
+    const isexists = await Flats.findOne( {name:req.body.name,wing_id:req.params.id,});
     if (isexists) {
       return res.status(404).json({ message: "Flat name is allready exists " });
     }
-   
+   console.log(flat);
     const newFlat = await flat.save();
     res.status(201).json(newFlat);
   } catch (err) {

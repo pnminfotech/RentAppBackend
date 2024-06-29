@@ -4,6 +4,7 @@ const flatsSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     wing_id: { type: mongoose.Schema.Types.ObjectId, ref: "Wings", required: true }, // Add reference to Society
+    flat_status: { type: String, required: true },
   },
   {
     collection: "Flats", // Update the collection name to "Flat"
