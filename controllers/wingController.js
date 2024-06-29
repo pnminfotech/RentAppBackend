@@ -36,14 +36,14 @@ exports.getWingBySocietyId = async (req, res) => {
 };
 
 
-exports.createWing = async (req, res) => {
+exports.createWingBySocietyId = async (req, res) => {
   const wing = new Wings({
     name: req.body.name,
-    society_id: req.body.society_id,
+    society_id: req.params.id,
   });
 
   try {
-    const isexists = await Wings.findOne( {name:req.body.name,society_id:req.body.society_id});
+    const isexists = await Wings.findOne( {name:req.body.name,society_id:req.params.id});
     if (isexists) {
       return res.status(404).json({ message: "Wing name is allready exists " });
     }
