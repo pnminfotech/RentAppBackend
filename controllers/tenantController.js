@@ -42,6 +42,19 @@ exports.getTenantById = async (req, res) => {
   }
 };
 
+exports.getTenantByFlatId = async (req, res) => {
+  try {
+    const tenant_by_flat_id = await Tenant.find({flat_id:req.params.id});
+    if (tenant_by_flat_id) {
+      res.json(tenant_by_flat_id);
+    } else {
+      res.status(404).json({ message: "Flat not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.createTenant = async (req, res) => {
   const tenant = new Tenant({
     name: req.body.name,
