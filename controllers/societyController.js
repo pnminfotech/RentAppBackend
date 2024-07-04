@@ -21,6 +21,7 @@ exports.getCountSocieties = async (req, res) => {
 
 exports.getSocietyById = async (req, res) => {
   try {
+    console.log(req.body);
     const society = await Society.findById(req.params.id);
     if (society) {
       res.json(society);
