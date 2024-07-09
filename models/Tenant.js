@@ -26,11 +26,19 @@ const tenantsSchema = new mongoose.Schema(
     reference_person1_age: { type: Number, required: true },
     reference_person2_age: { type: Number, required: true },
     agent_name: { type: String, required: true },
-    flat_id: { type: mongoose.Schema.Types.ObjectId, ref: "Flats", required: true },
-    rent_status:{type:String, required:true} // Add reference to Society
+    flat_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Flats",
+      required: true,
+    },
+    rent_status: { type: String, required: true },
+    tenantPhoto: { type: String },
+    adharFrontPhoto: { type: String }, // URL or binary data storage
+    adharBackPhoto: { type: String }, // URL or binary data storage
+    panCardPhoto: { type: String },
   },
   {
-    collection: "Tenants", // Update the collection name to "Flat"
+    collection: "Tenants", // Update the collection name to "Tenants"
   }
 );
 
