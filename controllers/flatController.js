@@ -128,3 +128,12 @@ exports.deleteFlat = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.getFlatsByType = async (req, res) => {
+  try {
+    const flats = await Flats.find({ flat_type: req.params.type });
+    res.json(flats);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -1,3 +1,5 @@
+// routes/flatRoutes.js
+
 const express = require("express");
 const router = express.Router();
 const FlatController = require("../controllers/flatController");
@@ -12,5 +14,8 @@ router.get("/flats-by-wings/:id", FlatController.getFlatsByWingsId);
 router.post("/add-flats-by-wing/:id", FlatController.createFlatByWingId);
 router.put("/:id", FlatController.updateFlat);
 router.delete("/:id", FlatController.deleteFlat);
+
+// New routes for flat types
+router.get("/type/:type", FlatController.getFlatsByType);
 
 module.exports = router;
