@@ -18,5 +18,6 @@ router.get(
   "/rent-received-details",
   TenantController.getTenantsWithRentReceived
 );
+router.get("/active-tenants", TenantController.getActiveTenants); // New route for active tenants
 
 module.exports = router;

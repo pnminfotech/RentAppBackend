@@ -200,3 +200,13 @@ exports.getTenantsWithRentReceived = async (req, res) => {
     res.status(500).json({ error: "Server Error" });
   }
 };
+
+exports.getActiveTenants = async (req, res) => {
+  try {
+    const activeTenants = await Tenant.find({ tenant_status: "Active" });
+    res.json(activeTenants);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
