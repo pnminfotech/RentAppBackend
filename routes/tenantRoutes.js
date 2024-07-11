@@ -1,3 +1,4 @@
+// routes/tenantRoutes.js
 const express = require("express");
 const router = express.Router();
 const TenantController = require("../controllers/tenantController");
@@ -18,6 +19,6 @@ router.get(
   "/rent-received-details",
   TenantController.getTenantsWithRentReceived
 );
-router.get("/active-tenants", TenantController.getActiveTenants); // New route for active tenants
+router.get("/active-tenants", TenantController.getActiveTenants);
 
 module.exports = router;
