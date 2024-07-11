@@ -5,6 +5,7 @@ const FlatController = require("../controllers/flatController");
 router.get("/", FlatController.getAllFlats);
 router.get("/on-rent", FlatController.getRentedFlats);
 router.get("/vaccant", FlatController.getVaccantFlats);
+router.get("/allotted", FlatController.getAllottedFlats);
 router.get("/count", FlatController.getCountFlats);
 router.get("/:id", FlatController.getFlatById);
 router.get("/flats-by-wings/:id", FlatController.getFlatsByWingsId);

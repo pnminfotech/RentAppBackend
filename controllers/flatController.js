@@ -15,27 +15,37 @@ exports.getCountFlats = async (req, res) => {
     res.json({ totalFlats: flats.length });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
 exports.getRentedFlats = async (req, res) => {
   try {
-    const flatsOnRent = await Flats.find({ flat_status: 'occupied' });
-    res.json({ noOfFlatsOnRent: flatsOnRent.length });
+    const flatsOnRent = await Flats.find({ flat_status: "occupied" });
+    res.json(flatsOnRent);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
 exports.getVaccantFlats = async (req, res) => {
   try {
-    const vaccantFlats = await Flats.find({ flat_status: 'vaccant' });
-    res.json({ noOfVaccantFlats: vaccantFlats.length });
+    const vaccantFlats = await Flats.find({ flat_status: "vaccant" });
+    res.json(vaccantFlats);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+exports.getAllottedFlats = async (req, res) => {
+  try {
+    const allottedFlats = await Flats.find({ flat_status: "allotted" });
+    res.json(allottedFlats);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
@@ -54,7 +64,7 @@ exports.getFlatById = async (req, res) => {
 
 exports.getFlatsByWingsId = async (req, res) => {
   try {
-    const flats_by_wing_id = await Flats.find({wing_id:req.params.id});
+    const flats_by_wing_id = await Flats.find({ wing_id: req.params.id });
     if (flats_by_wing_id) {
       res.json(flats_by_wing_id);
     } else {
@@ -69,14 +79,17 @@ exports.createFlatByWingId = async (req, res) => {
   const flat = new Flats({
     name: req.body.name,
     wing_id: req.params.id,
-    flat_status:"vaccant",
+    flat_status: "vaccant",
   });
   try {
-    const isexists = await Flats.findOne( {name:req.body.name,wing_id:req.params.id,});
+    const isexists = await Flats.findOne({
+      name: req.body.name,
+      wing_id: req.params.id,
+    });
     if (isexists) {
-      return res.status(404).json({ message: "Flat name is allready exists " });
+      return res.status(404).json({ message: "Flat name is already exists" });
     }
-   console.log(flat);
+    console.log(flat);
     const newFlat = await flat.save();
     res.status(201).json(newFlat);
   } catch (err) {
@@ -92,9 +105,7 @@ exports.updateFlat = async (req, res) => {
       flat.name = req.body.name || flat.name;
 
       const updatedFlat = await flat.save();
-      res.json(updatedFlat
-
-      );
+      res.json(updatedFlat);
     } else {
       res.status(404).json({ message: "Flat not found" });
     }
