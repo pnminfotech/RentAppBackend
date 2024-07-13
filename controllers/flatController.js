@@ -63,8 +63,10 @@ exports.getFlatById = async (req, res) => {
 };
 
 exports.getFlatsByWingsId = async (req, res) => {
+  console.log("Hii");
   try {
     const flats_by_wing_id = await Flats.find({ wing_id: req.params.id });
+    console.log(flats_by_wing_id);
     if (flats_by_wing_id) {
       res.json(flats_by_wing_id);
     } else {
