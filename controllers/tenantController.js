@@ -1,6 +1,6 @@
 // controllers/tenantController.js
 const Tenant = require("../models/Tenant");
-
+const fs = require("fs");
 exports.getAllTenants = async (req, res) => {
   try {
     const tenants = await Tenant.find();
@@ -86,6 +86,19 @@ exports.createTenant = async (req, res) => {
     rent_status,
   } = req.body;
 
+  const files = req.files;
+  // console.log(files);
+  if (
+    !files ||
+    !files.tenant_photo ||
+    !files.adhar_front ||
+    !files.adhar_back ||
+    !files.pan_photo ||
+    !files.electricity_bill
+  ) {
+    return res.status(400).json({ message: "All file fields are required." });
+  }
+
   const tenant = new Tenant({
     name,
     ph_no,
@@ -111,14 +124,28 @@ exports.createTenant = async (req, res) => {
     reference_person1_age,
     reference_person2_age,
     agent_name,
-    flat_id,
     rent_status,
+    name,
+    flat_id: req.params.id,
+    tenant_photo: files.tenant_photo[0].path,
+    adhar_front: files.adhar_front[0].path,
+    adhar_back: files.adhar_back[0].path,
+    pan_photo: files.pan_photo[0].path,
+    electricity_bill: files.electricity_bill[0].path,
   });
 
   try {
     const newTenant = await tenant.save();
     res.status(201).json(newTenant);
   } catch (err) {
+    // Delete uploaded files in case of error
+    Object.values(files).forEach((fileArray) => {
+      fileArray.forEach((file) => {
+        fs.unlink(file.path, (err) => {
+          if (err) console.error(`Error deleting file: ${file.path}`);
+        });
+      });
+    });
     res.status(400).json({ message: err.message });
   }
 };

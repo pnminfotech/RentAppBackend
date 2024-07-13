@@ -32,13 +32,14 @@ const tenantsSchema = new mongoose.Schema(
       required: true,
     },
     rent_status: { type: String, required: true },
-    tenantPhoto: { type: String },
-    adharFrontPhoto: { type: String }, // URL or binary data storage
-    adharBackPhoto: { type: String }, // URL or binary data storage
-    panCardPhoto: { type: String },
+    tenant_photo: { type: String },
+    adhar_front: { type: String },
+    adhar_back: { type: String },
+    pan_photo: { type: String },
+    electricity_bill: { type: String },
   },
   {
-    collection: "Tenants", // Update the collection name to "Tenants"
+    collection: "Tenants",
   }
 );
 
