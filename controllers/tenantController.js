@@ -57,84 +57,84 @@ exports.getTenantByFlatId = async (req, res) => {
 };
 
 exports.createTenant = async (req, res) => {
-  const {
-    name,
-    ph_no,
-    emailId,
-    age,
-    maintaince,
-    final_rent,
-    deposit,
-    current_meter_reading,
-    rent_form_date,
-    permanant_address,
-    previous_address,
-    nature_of_work,
-    working_address,
-    work_ph_no,
-    family_members,
-    male_members,
-    female_members,
-    childs,
-    family_member_names,
-    reference_person1,
-    reference_person2,
-    reference_person1_age,
-    reference_person2_age,
-    agent_name,
-    flat_id,
-    rent_status,
-  } = req.body;
-
-  const files = req.files;
-  // console.log(files);
-  if (
-    !files ||
-    !files.tenant_photo ||
-    !files.adhar_front ||
-    !files.adhar_back ||
-    !files.pan_photo ||
-    !files.electricity_bill
-  ) {
-    return res.status(400).json({ message: "All file fields are required." });
-  }
-
-  const tenant = new Tenant({
-    name,
-    ph_no,
-    emailId,
-    age,
-    maintaince,
-    final_rent,
-    deposit,
-    current_meter_reading,
-    rent_form_date,
-    permanant_address,
-    previous_address,
-    nature_of_work,
-    working_address,
-    work_ph_no,
-    family_members,
-    male_members,
-    female_members,
-    childs,
-    family_member_names,
-    reference_person1,
-    reference_person2,
-    reference_person1_age,
-    reference_person2_age,
-    agent_name,
-    rent_status,
-    name,
-    flat_id: req.params.id,
-    tenant_photo: files.tenant_photo[0].path,
-    adhar_front: files.adhar_front[0].path,
-    adhar_back: files.adhar_back[0].path,
-    pan_photo: files.pan_photo[0].path,
-    electricity_bill: files.electricity_bill[0].path,
-  });
-
   try {
+    const {
+      name,
+      ph_no,
+      emailId,
+      age,
+      maintaince,
+      final_rent,
+      deposit,
+      current_meter_reading,
+      rent_form_date,
+      permanant_address,
+      previous_address,
+      nature_of_work,
+      working_address,
+      work_ph_no,
+      family_members,
+      male_members,
+      female_members,
+      childs,
+      family_member_names,
+      reference_person1,
+      reference_person2,
+      reference_person1_age,
+      reference_person2_age,
+      agent_name,
+      flat_id,
+      rent_status,
+    } = req.body;
+
+    const files = req.files;
+    // console.log(files);
+    if (
+      !files ||
+      !files.tenant_photo ||
+      !files.adhar_front ||
+      !files.adhar_back ||
+      !files.pan_photo ||
+      !files.electricity_bill
+    ) {
+      return res.status(400).json({ message: "All file fields are required." });
+    }
+
+    const tenant = new Tenant({
+      name,
+      ph_no,
+      emailId,
+      age,
+      maintaince,
+      final_rent,
+      deposit,
+      current_meter_reading,
+      rent_form_date,
+      permanant_address,
+      previous_address,
+      nature_of_work,
+      working_address,
+      work_ph_no,
+      family_members,
+      male_members,
+      female_members,
+      childs,
+      family_member_names,
+      reference_person1,
+      reference_person2,
+      reference_person1_age,
+      reference_person2_age,
+      agent_name,
+      rent_status,
+      name,
+      flat_id: req.params.id,
+      tenant_photo: files.tenant_photo[0].path,
+      adhar_front: files.adhar_front[0].path,
+      adhar_back: files.adhar_back[0].path,
+      pan_photo: files.pan_photo[0].path,
+      electricity_bill: files.electricity_bill[0].path,
+    });
+
     const newTenant = await tenant.save();
     res.status(201).json(newTenant);
   } catch (err) {
