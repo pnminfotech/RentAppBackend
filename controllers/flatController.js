@@ -81,6 +81,7 @@ exports.createFlatByWingId = async (req, res) => {
   const flat = new Flats({
     name: req.body.name,
     wing_id: req.params.id,
+    flat_type: req.body.flat_type,
     flat_status: "vaccant",
   });
   try {
@@ -105,6 +106,7 @@ exports.updateFlat = async (req, res) => {
 
     if (flat) {
       flat.name = req.body.name || flat.name;
+      flat.flat_type = req.body.flat_type || flat.flat_type;
 
       const updatedFlat = await flat.save();
       res.json(updatedFlat);

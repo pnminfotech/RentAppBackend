@@ -1,5 +1,6 @@
 // controllers/tenantController.js
 const Tenant = require("../models/Tenant");
+const Flats = require("../models/Flat");
 const fs = require("fs");
 exports.getAllTenants = async (req, res) => {
   try {
@@ -136,9 +137,17 @@ exports.createTenant = async (req, res) => {
     });
 
     const newTenant = await tenant.save();
+    const flat = await Flats.findById(req.params.id);
+
+    if (flat) {
+      flat.flat_status = "allotted";
+
+      const updatedFlat = await flat.save();
+    } else {
+      res.status(404).json({ message: "Flat not found" });
+    }
     res.status(201).json(newTenant);
   } catch (err) {
-    // Delete uploaded files in case of error
     Object.values(files).forEach((fileArray) => {
       fileArray.forEach((file) => {
         fs.unlink(file.path, (err) => {
