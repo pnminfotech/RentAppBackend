@@ -26,7 +26,7 @@ app.use("/uploads", express.static(uploadDir));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send({ message: "Something broke!" });
+  res.status(500).send({ message: "Something broke!" + err });
 });
 
 app.listen(port, () => {
