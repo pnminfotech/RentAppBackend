@@ -6,6 +6,7 @@ const tenantsSchema = new mongoose.Schema(
     ph_no: { type: String, required: true },
     emailId: { type: String, required: true },
     age: { type: Number, required: true },
+    gender: { type: String, required: true },
     maintaince: { type: Number, required: true },
     final_rent: { type: Number, required: true },
     deposit: { type: Number, required: true },

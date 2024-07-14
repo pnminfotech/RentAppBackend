@@ -58,12 +58,14 @@ exports.getTenantByFlatId = async (req, res) => {
 };
 
 exports.createTenant = async (req, res) => {
+  const files = req.files;
   try {
     const {
       name,
       ph_no,
       emailId,
       age,
+      gender,
       maintaince,
       final_rent,
       deposit,
@@ -88,7 +90,6 @@ exports.createTenant = async (req, res) => {
       rent_status,
     } = req.body;
 
-    const files = req.files;
     // console.log(files);
     if (
       !files ||
@@ -106,6 +107,7 @@ exports.createTenant = async (req, res) => {
       ph_no,
       emailId,
       age,
+      gender,
       maintaince,
       final_rent,
       deposit,
@@ -139,13 +141,9 @@ exports.createTenant = async (req, res) => {
     const newTenant = await tenant.save();
     const flat = await Flats.findById(req.params.id);
 
-    if (flat) {
-      flat.flat_status = "allotted";
+    flat.flat_status = "allotted";
+    const updatedFlat = await flat.save();
 
-      const updatedFlat = await flat.save();
-    } else {
-      res.status(404).json({ message: "Flat not found" });
-    }
     res.status(201).json(newTenant);
   } catch (err) {
     Object.values(files).forEach((fileArray) => {
@@ -168,6 +166,7 @@ exports.updateTenant = async (req, res) => {
       tenant.ph_no = req.body.ph_no || tenant.ph_no;
       tenant.emailId = req.body.emailId || tenant.emailId;
       tenant.age = req.body.age || tenant.age;
+      tenant.gender = req.body.gender || tenant.gender;
       tenant.maintaince = req.body.maintaince || tenant.maintaince;
       tenant.final_rent = req.body.final_rent || tenant.final_rent;
       tenant.deposit = req.body.deposit || tenant.deposit;
