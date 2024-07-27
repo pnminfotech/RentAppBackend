@@ -38,6 +38,7 @@ const tenantsSchema = new mongoose.Schema(
     adhar_back: { type: String },
     pan_photo: { type: String },
     electricity_bill: { type: String },
+    active: { type: Boolean, default: true } // New field
   },
   {
     collection: "Tenants",
