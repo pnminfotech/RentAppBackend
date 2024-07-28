@@ -68,4 +68,6 @@ router.get("/active-tenants", TenantController.getActiveTenants);
 
 router.put("/deactivate-tenant-by/:id",TenantController.deactivateTenant)
 
+router.put("/activate-tenant-by/:id",TenantController.activateTenant)
+
 module.exports = router;

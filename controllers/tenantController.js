@@ -272,3 +272,19 @@ exports.deactivateTenant = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.activateTenant = async (req, res) => {
+  try {
+    const tenant = await Tenant.findById(req.params.id);
+
+    if (tenant) {
+      tenant.active = true; // Assuming `active` field is used to track tenant status
+      const updatedTenant = await tenant.save();
+      res.json({ message: "Tenant activated", tenant: updatedTenant });
+    } else {
+      res.status(404).json({ message: "Tenant not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
