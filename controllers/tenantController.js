@@ -49,6 +49,7 @@ exports.getTenantByFlatId = async (req, res) => {
     const tenant_by_flat_id = await Tenant.findOne({ flat_id: req.params.id, active:true });
     if (tenant_by_flat_id) {
       res.json(tenant_by_flat_id);
+      console.log(tenant_by_flat_id);
     } else {
       res.status(404).json({ message: "Flat not found" });
     }
