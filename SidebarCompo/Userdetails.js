@@ -20,6 +20,8 @@ export default function Userdetails({ route }) {
   const [addUserModalVisible, setAddUserModalVisible] = useState(false);
   const [date, setDate] = useState(new Date()); // Initialize date state
   const [show, setShow] = useState(false);
+  
+
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
