@@ -46,7 +46,7 @@ exports.getTenantById = async (req, res) => {
 
 exports.getTenantByFlatId = async (req, res) => {
   try {
-    const tenant_by_flat_id = await Tenant.find({ flat_id: req.params.id, active:"true" });
+    const tenant_by_flat_id = await Tenant.find({ flat_id: req.params.id, active:true });
     if (tenant_by_flat_id) {
       res.json(tenant_by_flat_id);
     } else {
