@@ -72,6 +72,6 @@ router.put("/deactivate-tenant-by/:id",TenantController.deactivateTenant)
 router.put("/activate-tenant-by/:id",TenantController.activateTenant)
 
 router.put("/:id/rent-paid", tenantController.markRentAsPaid);
-router.put("/:id/deactive", tenantController.deactiveTenants);
+router.put("/:id/deactive", tenantController.deactiveTenant);
 
 module.exports = router;

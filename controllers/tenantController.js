@@ -46,7 +46,7 @@ exports.getTenantById = async (req, res) => {
 
 exports.getTenantByFlatId = async (req, res) => {
   try {
-    const tenant_by_flat_id = await Tenant.find({ flat_id: req.params.id });
+    const tenant_by_flat_id = await Tenant.find({ flat_id: req.params.id, active:"true" });
     if (tenant_by_flat_id) {
       res.json(tenant_by_flat_id);
     } else {
@@ -305,12 +305,11 @@ exports.markRentAsPaid = async (req, res) => {
   }
 };
 
-exports.deactiveTenants = async (req, res) => {
+exports.deactiveTenant = async (req, res) => {
   try {
     const tenant = await Tenant.findById(req.params.id);
-
     if (tenant) {
-      tenant.active = false; // Assuming `active` field is used to track tenant status
+      tenant.status = "Deactivated"; // or tenant.active = false;
       const updatedTenant = await tenant.save();
       res.json({ message: "Tenant deactivated", tenant: updatedTenant });
     } else {
