@@ -36,7 +36,7 @@ router.get("/", TenantController.getAllTenants);
 router.get("/rent-received", TenantController.getAllRentReceivedTenants);
 router.get("/rent-pending", TenantController.getAllRentPendingTenants);
 router.get("/:id", TenantController.getTenantById);
-router.get("/tenants-by-flat", TenantController.getTenantByFlatId);
+router.get("/tenants-by-flat/:id", TenantController.getTenantByFlatId);
 
 router.post(
   "/add-tenant-by-flat/:id",
