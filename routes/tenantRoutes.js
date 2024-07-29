@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const TenantController = require("../controllers/tenantController");
+const tenantController = require("../controllers/tenantController");
 const multer = require("multer");
 const path = require("path");
 
@@ -35,7 +36,7 @@ router.get("/", TenantController.getAllTenants);
 router.get("/rent-received", TenantController.getAllRentReceivedTenants);
 router.get("/rent-pending", TenantController.getAllRentPendingTenants);
 router.get("/:id", TenantController.getTenantById);
-router.get("/tenants-by-flat/:id", TenantController.getTenantByFlatId);
+router.get("/tenants-by-flat", TenantController.getTenantByFlatId);
 
 router.post(
   "/add-tenant-by-flat/:id",
@@ -69,5 +70,8 @@ router.get("/active-tenants", TenantController.getActiveTenants);
 router.put("/deactivate-tenant-by/:id",TenantController.deactivateTenant)
 
 router.put("/activate-tenant-by/:id",TenantController.activateTenant)
+
+router.put("/:id/rent-paid", tenantController.markRentAsPaid);
+router.put("/:id/deactive", tenantController.deactiveTenants);
 
 module.exports = router;

@@ -288,3 +288,35 @@ exports.activateTenant = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.markRentAsPaid = async (req, res) => {
+  try {
+    const tenant = await Tenant.findById(req.params.id);
+
+    if (tenant) {
+      tenant.rentPaid = true; // Assuming `rentPaid` field is used to track rent payment status
+      const updatedTenant = await tenant.save();
+      res.json({ message: "Rent marked as paid", tenant: updatedTenant });
+    } else {
+      res.status(404).json({ message: "Tenant not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deactiveTenants = async (req, res) => {
+  try {
+    const tenant = await Tenant.findById(req.params.id);
+
+    if (tenant) {
+      tenant.active = false; // Assuming `active` field is used to track tenant status
+      const updatedTenant = await tenant.save();
+      res.json({ message: "Tenant deactivated", tenant: updatedTenant });
+    } else {
+      res.status(404).json({ message: "Tenant not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
