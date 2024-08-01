@@ -6,7 +6,7 @@ const paymentSchema = new mongoose.Schema({
   society: {  type: String, required: true },
   rentAmount: { type: Number, required: true },
   maintenanceAmount: { type: Number, required: true },
-  lightBillAmount: { type: Number, required: true },
+
 }, {
     collection: "Payment",
   });

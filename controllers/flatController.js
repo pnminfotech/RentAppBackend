@@ -133,10 +133,11 @@ exports.deleteFlat = async (req, res) => {
   }
 };
 
-exports.getFlatsByType = async (req, res) => {
+exports.getFlatTypes = async (req, res) => {
   try {
-    const flats = await Flats.find({ flat_type: req.params.type });
-    res.json(flats);
+    // Fetch distinct flat types from the collection
+    const flatTypes = await Flats.distinct('flat_type');
+    res.json(flatTypes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -16,6 +16,6 @@ router.put("/:id", FlatController.updateFlat);
 router.delete("/:id", FlatController.deleteFlat);
 
 // New routes for flat types
-router.get("/type/:type", FlatController.getFlatsByType);
+router.get("/type/:type", FlatController.getFlatTypes);
 
 module.exports = router;

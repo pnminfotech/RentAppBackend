@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const paymentController = require('../controllers/paymentController');
 
-// Route to get payment amounts by flat type (GET request)
-router.get('/:society/:flatType', paymentController.getPaymentAmounts);
+// POST: Update Rent Amount
+router.post('/rent', paymentController.updateRent);
 
-// Route to add or update payment amounts (POST request)
-router.post('/', paymentController.addOrUpdatePaymentAmounts);
+// POST: Update Maintenance Amount
+router.post('/maintenance', paymentController.updateMaintenance);
+
+// GET: Get Rent or Maintenance Amount
+router.get('/:type/:society/:flatType', paymentController.getPaymentDetails);
 
 module.exports = router;
