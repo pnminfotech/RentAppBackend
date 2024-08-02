@@ -41,6 +41,19 @@ const tenantsSchema = new mongoose.Schema(
     active: { type: Boolean, default: true }, // New field
     rentPaid: { type: Boolean, default: false }, 
    
+    society_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Society",
+      required: true,
+    },
+    wing_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Wing",
+      required: true,
+    },
+    
+    // Other fields
+  
   },
   {
     collection: "Tenants",

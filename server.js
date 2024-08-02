@@ -23,6 +23,7 @@ connectToMongoDB();
 app.use("/api/", routes);
 
 app.use("/uploads", express.static(uploadDir));
+// app.use("/api/flats", flatRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

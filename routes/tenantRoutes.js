@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const TenantController = require("../controllers/tenantController");
-const tenantController = require("../controllers/tenantController");
 const multer = require("multer");
 const path = require("path");
 
@@ -61,17 +60,37 @@ router.delete("/:id", TenantController.deleteTenant);
 
 // New routes
 router.get("/rent-pending-details", TenantController.getTenantsWithRentPending);
-router.get(
-  "/rent-received-details",
-  TenantController.getTenantsWithRentReceived
-);
+router.get("/rent-received-details", TenantController.getTenantsWithRentReceived);
 router.get("/active-tenants", TenantController.getActiveTenants);
 
-router.put("/deactivate-tenant-by/:id",TenantController.deactivateTenant)
+router.put("/deactivate-tenant-by/:id", TenantController.deactivateTenant);
+router.put("/activate-tenant-by/:id", TenantController.activateTenant);
 
-router.put("/activate-tenant-by/:id",TenantController.activateTenant)
+router.put("/:id/rent-paid", TenantController.markRentAsPaid);
+router.put("/:id/deactive", TenantController.deactiveTenant);
 
-router.put("/:id/rent-paid", tenantController.markRentAsPaid);
-router.put("/:id/deactive", tenantController.deactiveTenant);
+// New route for adding tenant by societyId, wingId, and flatId
+router.post(
+  "/add-tenant/:societyId/:wingId/:flatId",
+  (req, res, next) => {
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        console.error("MulterError:", err);
+        res.status(400).json({ error: err.message });
+      } else if (err) {
+        console.error("Unknown error:", err);
+        res.status(500).json({ error: err.message });
+      } else {
+        next();
+      }
+    });
+  },
+  TenantController.createTenant
+);
+
+router.get(
+  "/tenants/:society_id/:wing_id/:flat_id",
+  TenantController.getTenantsBySocietyWingFlat
+);
 
 module.exports = router;

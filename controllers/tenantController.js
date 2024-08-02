@@ -2,6 +2,7 @@
 const Tenant = require("../models/Tenant");
 const Flats = require("../models/Flat");
 const fs = require("fs");
+const mongoose = require("mongoose");
 exports.getAllTenants = async (req, res) => {
   try {
     const tenants = await Tenant.find();
@@ -87,6 +88,8 @@ exports.createTenant = async (req, res) => {
       reference_person1_age,
       reference_person2_age,
       agent_name,
+      society_id,
+      wing_id,
       flat_id,
       rent_status,
     } = req.body;
@@ -130,8 +133,9 @@ exports.createTenant = async (req, res) => {
       reference_person2_age,
       agent_name,
       rent_status,
-      name,
-      flat_id: req.params.id,
+      flat_id,
+      society_id,
+      wing_id,
       tenant_photo: files.tenant_photo[0].path,
       adhar_front: files.adhar_front[0].path,
       adhar_back: files.adhar_back[0].path,
@@ -140,10 +144,10 @@ exports.createTenant = async (req, res) => {
     });
 
     const newTenant = await tenant.save();
-    const flat = await Flats.findById(req.params.id);
+    const flat = await Flats.findById(flat_id);
 
-    flat.flat_status = "allotted";
-    const updatedFlat = await flat.save();
+    // flat.flat_status = "vacant";
+    // const updatedFlat = await flat.save();
 
     res.status(201).json(newTenant);
   } catch (err) {
@@ -157,6 +161,7 @@ exports.createTenant = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
 
 exports.updateTenant = async (req, res) => {
   try {
@@ -320,3 +325,36 @@ exports.deactiveTenant = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
+// controllers/tenantController.js
+
+exports.getTenantsBySocietyWingFlat = async (req, res) => {
+  const { society_id, wing_id, flat_id } = req.params;
+
+  if (!society_id || !wing_id || !flat_id) {
+    return res.status(400).json({ message: "All parameters (society_id, wing_id, flat_id) are required." });
+  }
+
+  console.log("Parameters:", { society_id, wing_id, flat_id });
+
+  try {
+    const tenants = await Tenant.find({
+      society_id: society_id,
+      wing_id: wing_id,
+      flat_id: flat_id,
+    });
+
+    console.log("Tenants Found:", tenants);
+
+    if (tenants.length === 0) {
+      return res.status(404).json({ message: "No tenants found for the given parameters." });
+    }
+
+    res.json(tenants);
+  } catch (err) {
+    console.error("Error Fetching Tenants:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+

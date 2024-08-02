@@ -2,18 +2,20 @@ const mongoose = require("mongoose");
 
 const flatsSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    flat_type: { type: String },
+       name: { type: String, required: true },
+       flat_type: { type: String },
+       amount: { type: String },
     wing_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Wings",
       required: true,
     }, // Add reference to Society
-    flat_status: { type: String, required: true },
+    flat_status: { type: String, enum: ['occupied', 'vacant'], required: true },
   },
   {
     collection: "Flats", // Update the collection name to "Flat"
   }
 );
+
 
 module.exports = mongoose.model("Flat", flatsSchema);
