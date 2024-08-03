@@ -52,6 +52,9 @@ const tenantsSchema = new mongoose.Schema(
       required: true,
     },
     
+    current_meter_reading: { type: Number }, // Optional field
+    fixed_light_bill: { type: Number }, // Optional field
+    total_light_bill: { type: Number, required: true },
     // Other fields
   
   },

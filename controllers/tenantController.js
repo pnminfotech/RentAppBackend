@@ -92,6 +92,8 @@ exports.createTenant = async (req, res) => {
       wing_id,
       flat_id,
       rent_status,
+      
+      fixed_light_bill,
     } = req.body;
 
     // console.log(files);
@@ -106,6 +108,14 @@ exports.createTenant = async (req, res) => {
       return res.status(400).json({ message: "All file fields are required." });
     }
 
+    let total_light_bill;
+    if (current_meter_reading) {
+      total_light_bill = current_meter_reading; // Store current meter reading directly
+    } else if (fixed_light_bill) {
+      total_light_bill = fixed_light_bill; // Store fixed light bill directly
+    } else {
+      return res.status(400).json({ message: "Either current meter reading or fixed light bill is required." });
+    }
     const tenant = new Tenant({
       name,
       ph_no,
@@ -141,6 +151,9 @@ exports.createTenant = async (req, res) => {
       adhar_back: files.adhar_back[0].path,
       pan_photo: files.pan_photo[0].path,
       electricity_bill: files.electricity_bill[0].path,
+      current_meter_reading: current_meter_reading || null,
+      fixed_light_bill: fixed_light_bill || null,
+      total_light_bill,
     });
 
     const newTenant = await tenant.save();
@@ -205,6 +218,15 @@ exports.updateTenant = async (req, res) => {
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
 
+      tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
+      tenant.fixed_light_bill = req.body.fixed_light_bill || tenant.fixed_light_bill;
+
+      if (req.body.current_meter_reading) {
+        tenant.total_light_bill = req.body.current_meter_reading;
+      } else if (req.body.fixed_light_bill) {
+        tenant.total_light_bill = req.body.fixed_light_bill;
+      }
+      
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
     } else {
