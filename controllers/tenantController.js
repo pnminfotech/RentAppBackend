@@ -47,7 +47,10 @@ exports.getTenantById = async (req, res) => {
 
 exports.getTenantByFlatId = async (req, res) => {
   try {
-    const tenant_by_flat_id = await Tenant.findOne({ flat_id: req.params.id, active:true });
+    const tenant_by_flat_id = await Tenant.find({
+      flat_id: req.params.id,
+      active: true,
+    });
     if (tenant_by_flat_id) {
       res.json(tenant_by_flat_id);
       console.log(tenant_by_flat_id);
@@ -92,7 +95,7 @@ exports.createTenant = async (req, res) => {
       wing_id,
       flat_id,
       rent_status,
-      
+
       fixed_light_bill,
     } = req.body;
 
@@ -114,7 +117,10 @@ exports.createTenant = async (req, res) => {
     } else if (fixed_light_bill) {
       total_light_bill = fixed_light_bill; // Store fixed light bill directly
     } else {
-      return res.status(400).json({ message: "Either current meter reading or fixed light bill is required." });
+      return res.status(400).json({
+        message:
+          "Either current meter reading or fixed light bill is required.",
+      });
     }
     const tenant = new Tenant({
       name,
@@ -175,7 +181,6 @@ exports.createTenant = async (req, res) => {
   }
 };
 
-
 exports.updateTenant = async (req, res) => {
   try {
     const tenant = await Tenant.findById(req.params.id);
@@ -218,15 +223,17 @@ exports.updateTenant = async (req, res) => {
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
 
-      tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
-      tenant.fixed_light_bill = req.body.fixed_light_bill || tenant.fixed_light_bill;
+      tenant.current_meter_reading =
+        req.body.current_meter_reading || tenant.current_meter_reading;
+      tenant.fixed_light_bill =
+        req.body.fixed_light_bill || tenant.fixed_light_bill;
 
       if (req.body.current_meter_reading) {
         tenant.total_light_bill = req.body.current_meter_reading;
       } else if (req.body.fixed_light_bill) {
         tenant.total_light_bill = req.body.fixed_light_bill;
       }
-      
+
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
     } else {
@@ -348,14 +355,15 @@ exports.deactiveTenant = async (req, res) => {
   }
 };
 
-
 // controllers/tenantController.js
 
 exports.getTenantsBySocietyWingFlat = async (req, res) => {
   const { society_id, wing_id, flat_id } = req.params;
 
   if (!society_id || !wing_id || !flat_id) {
-    return res.status(400).json({ message: "All parameters (society_id, wing_id, flat_id) are required." });
+    return res.status(400).json({
+      message: "All parameters (society_id, wing_id, flat_id) are required.",
+    });
   }
 
   console.log("Parameters:", { society_id, wing_id, flat_id });
@@ -370,7 +378,9 @@ exports.getTenantsBySocietyWingFlat = async (req, res) => {
     console.log("Tenants Found:", tenants);
 
     if (tenants.length === 0) {
-      return res.status(404).json({ message: "No tenants found for the given parameters." });
+      return res
+        .status(404)
+        .json({ message: "No tenants found for the given parameters." });
     }
 
     res.json(tenants);
@@ -379,4 +389,3 @@ exports.getTenantsBySocietyWingFlat = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
