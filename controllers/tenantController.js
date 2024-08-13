@@ -1,4 +1,4 @@
-// controllers/tenantController.js
+// controllers/tenantController.js    
 const Tenant = require("../models/Tenant");
 const Flats = require("../models/Flat");
 const fs = require("fs");
@@ -63,7 +63,9 @@ exports.getTenantByFlatId = async (req, res) => {
 };
 
 exports.createTenant = async (req, res) => {
-  const files = req.files;
+  const files = req.body.files;
+  console.log(req.params);
+  
   try {
     const {
       name,
@@ -91,13 +93,13 @@ exports.createTenant = async (req, res) => {
       reference_person1_age,
       reference_person2_age,
       agent_name,
-      society_id,
-      wing_id,
-      flat_id,
+      
+      // society_id,
+      // wing_id,
       rent_status,
-
-      fixed_light_bill,
+      // fixed_light_bill,
     } = req.body;
+
 
     // console.log(files);
     if (
@@ -110,18 +112,14 @@ exports.createTenant = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All file fields are required." });
     }
-
-    let total_light_bill;
-    if (current_meter_reading) {
-      total_light_bill = current_meter_reading; // Store current meter reading directly
-    } else if (fixed_light_bill) {
-      total_light_bill = fixed_light_bill; // Store fixed light bill directly
-    } else {
-      return res.status(400).json({
-        message:
-          "Either current meter reading or fixed light bill is required.",
-      });
-    }
+    // let total_light_bill;
+    // if (current_meter_reading) {
+    //   total_light_bill = current_meter_reading; // Store current meter reading directly
+    // } else if (fixed_light_bill) {
+    //   total_light_bill = fixed_light_bill; // Store fixed light bill directly
+    // } else {
+    //   return res.status(400).json({ message: "Either current meter reading or fixed light bill is required." });
+    // }
     const tenant = new Tenant({
       name,
       ph_no,
@@ -150,26 +148,22 @@ exports.createTenant = async (req, res) => {
       agent_name,
       rent_status,
       flat_id,
-      society_id,
-      wing_id,
       tenant_photo: files.tenant_photo[0].path,
       adhar_front: files.adhar_front[0].path,
       adhar_back: files.adhar_back[0].path,
       pan_photo: files.pan_photo[0].path,
       electricity_bill: files.electricity_bill[0].path,
-      current_meter_reading: current_meter_reading || null,
-      fixed_light_bill: fixed_light_bill || null,
-      total_light_bill,
+      // current_meter_reading: current_meter_reading || null,
+      // fixed_light_bill: fixed_light_bill || null,
+      // total_light_bill,
     });
-
+    
+    // Check only required fields and ignore unnecessary ones
     const newTenant = await tenant.save();
-    const flat = await Flats.findById(flat_id);
-
-    // flat.flat_status = "vacant";
-    // const updatedFlat = await flat.save();
-
+    
     res.status(201).json(newTenant);
   } catch (err) {
+    // If there's an error, delete the uploaded files to prevent orphan files
     Object.values(files).forEach((fileArray) => {
       fileArray.forEach((file) => {
         fs.unlink(file.path, (err) => {
@@ -180,6 +174,7 @@ exports.createTenant = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
 
 exports.updateTenant = async (req, res) => {
   try {
@@ -194,45 +189,35 @@ exports.updateTenant = async (req, res) => {
       tenant.maintaince = req.body.maintaince || tenant.maintaince;
       tenant.final_rent = req.body.final_rent || tenant.final_rent;
       tenant.deposit = req.body.deposit || tenant.deposit;
-      tenant.current_meter_reading =
-        req.body.current_meter_reading || tenant.current_meter_reading;
+      tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
       tenant.rent_form_date = req.body.rent_form_date || tenant.rent_form_date;
-      tenant.permanant_address =
-        req.body.permanant_address || tenant.permanant_address;
-      tenant.previous_address =
-        req.body.previous_address || tenant.previous_address;
+      tenant.permanant_address = req.body.permanant_address || tenant.permanant_address;
+      tenant.previous_address = req.body.previous_address || tenant.previous_address;
       tenant.nature_of_work = req.body.nature_of_work || tenant.nature_of_work;
-      tenant.working_address =
-        req.body.working_address || tenant.working_address;
+      tenant.working_address = req.body.working_address || tenant.working_address;
       tenant.work_ph_no = req.body.work_ph_no || tenant.work_ph_no;
       tenant.family_members = req.body.family_members || tenant.family_members;
       tenant.male_members = req.body.male_members || tenant.male_members;
       tenant.female_members = req.body.female_members || tenant.female_members;
       tenant.childs = req.body.childs || tenant.childs;
-      tenant.family_member_names =
-        req.body.family_member_names || tenant.family_member_names;
-      tenant.reference_person1 =
-        req.body.reference_person1 || tenant.reference_person1;
-      tenant.reference_person2 =
-        req.body.reference_person2 || tenant.reference_person2;
-      tenant.reference_person1_age =
-        req.body.reference_person1_age || tenant.reference_person1_age;
-      tenant.reference_person2_age =
-        req.body.reference_person2_age || tenant.reference_person2_age;
+      tenant.family_member_names = req.body.family_member_names || tenant.family_member_names;
+      tenant.reference_person1 = req.body.reference_person1 || tenant.reference_person1;
+      tenant.reference_person2 = req.body.reference_person2 || tenant.reference_person2;
+      tenant.reference_person1_age = req.body.reference_person1_age || tenant.reference_person1_age;
+      tenant.reference_person2_age = req.body.reference_person2_age || tenant.reference_person2_age;
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
 
-      tenant.current_meter_reading =
-        req.body.current_meter_reading || tenant.current_meter_reading;
-      tenant.fixed_light_bill =
-        req.body.fixed_light_bill || tenant.fixed_light_bill;
+      
+      // tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
+      // tenant.fixed_light_bill = req.body.fixed_light_bill || tenant.fixed_light_bill;
 
-      if (req.body.current_meter_reading) {
-        tenant.total_light_bill = req.body.current_meter_reading;
-      } else if (req.body.fixed_light_bill) {
-        tenant.total_light_bill = req.body.fixed_light_bill;
-      }
+      // if (req.body.current_meter_reading) {
+      //   tenant.total_light_bill = req.body.current_meter_reading;
+      // } else if (req.body.fixed_light_bill) {
+      //   tenant.total_light_bill = req.body.fixed_light_bill;
+      // }
 
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);

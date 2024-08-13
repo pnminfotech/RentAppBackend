@@ -8,14 +8,18 @@ const flatsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Wings",
       required: true,
-    }, // Add reference to Society
+    },
+    society: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Society",
+      required: true, // Assuming society is a required field
+    },
     flat_status: { type: String, required: true },
-    rent_amount: { type: Number, required: true },
+    rentAmount: { type: Number, required: true },
   },
   {
-    collection: "Flats", // Update the collection name to "Flat"
+    collection: "Flats",
   }
 );
 
 module.exports = mongoose.model("Flat", flatsSchema);
-

@@ -40,23 +40,11 @@ const tenantsSchema = new mongoose.Schema(
     electricity_bill: { type: String },
     active: { type: Boolean, default: true }, // New field
     rentPaid: { type: Boolean, default: false }, 
-   
-    society_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Society",
-      required: true,
-    },
-    wing_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Wing",
-      required: true,
-    },
     
     current_meter_reading: { type: Number }, // Optional field
     fixed_light_bill: { type: Number }, // Optional field
     total_light_bill: { type: Number, required: true },
-    // Other fields
-  
+    // fixed_meter_reading: { type: Number, required: false },
   },
   {
     collection: "Tenants",
