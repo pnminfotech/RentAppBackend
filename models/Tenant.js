@@ -38,13 +38,6 @@ const tenantsSchema = new mongoose.Schema(
     adhar_back: { type: String },
     pan_photo: { type: String },
     electricity_bill: { type: String },
-    active: { type: Boolean, default: true }, // New field
-    rentPaid: { type: Boolean, default: false }, 
-    
-    // current_meter_reading: { type: Number }, // Optional field
-    // fixed_light_bill: { type: Number }, // Optional field
-    // total_light_bill: { type: Number, required: false },
-    // fixed_meter_reading: { type: Number, required: false },
   },
   {
     collection: "Tenants",

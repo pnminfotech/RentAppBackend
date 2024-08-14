@@ -43,6 +43,7 @@ const getSocieties = async (req, res) => {
     const db = cl.db("StockManagementSystem");
     const collection = db.collection("Buildings");
     const totalBuildings = await collection.countDocuments();
+    console.log(totalBuildings)
     if (totalBuildings) {
       res.status(201).json({ totalBuildings });
     } else {

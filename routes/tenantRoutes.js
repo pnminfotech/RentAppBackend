@@ -67,8 +67,8 @@ router.put("/:id", TenantController.updateTenant);
 router.delete("/:id", TenantController.deleteTenant);
 
 // New routes
-router.get("/rent-pending-details", TenantController.getTenantsWithRentPending);
-router.get("/rent-received-details", TenantController.getTenantsWithRentReceived);
+// router.get("/rent-pending-details", TenantController.getTenantsWithRentPending);
+// router.get("/rent-received-details", TenantController.getTenantsWithRentReceived);
 router.get("/active-tenants", TenantController.getActiveTenants);
 
 router.put("/deactivate-tenant-by/:id", TenantController.deactivateTenant);

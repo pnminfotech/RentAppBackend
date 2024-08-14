@@ -15,7 +15,7 @@ exports.getAllTenants = async (req, res) => {
 exports.getAllRentReceivedTenants = async (req, res) => {
   try {
     const tenantRentReceived = await Tenant.find({ rent_status: "paid" });
-    res.json(tenantRentReceived);
+    res.json({tenantRentReceived:tenantRentReceived.length});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -25,7 +25,7 @@ exports.getAllRentReceivedTenants = async (req, res) => {
 exports.getAllRentPendingTenants = async (req, res) => {
   try {
     const tenantRentPending = await Tenant.find({ rent_status: "pending" });
-    res.json(tenantRentPending);
+    res.json({tenantRentPending:tenantRentPending.length});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -93,13 +93,9 @@ exports.createTenant = async (req, res) => {
       reference_person1_age,
       reference_person2_age,
       agent_name,
-      
-      // society_id,
-      // wing_id,
+      flat_id,
       rent_status,
-      // fixed_light_bill,
     } = req.body;
-
 
     // console.log(files);
     if (
@@ -112,6 +108,7 @@ exports.createTenant = async (req, res) => {
     ) {
       return res.status(400).json({ message: "All file fields are required." });
     }
+
     // let total_light_bill;
     // if (current_meter_reading) {
     //   total_light_bill = current_meter_reading; // Store current meter reading directly
@@ -147,17 +144,15 @@ exports.createTenant = async (req, res) => {
       reference_person2_age,
       agent_name,
       rent_status,
-      flat_id,
+      name,
+      flat_id: req.params.id,
       tenant_photo: files.tenant_photo[0].path,
       adhar_front: files.adhar_front[0].path,
       adhar_back: files.adhar_back[0].path,
       pan_photo: files.pan_photo[0].path,
       electricity_bill: files.electricity_bill[0].path,
-      // current_meter_reading: current_meter_reading || null,
-      // fixed_light_bill: fixed_light_bill || null,
-      // total_light_bill,
     });
-    
+
     // Check only required fields and ignore unnecessary ones
     const newTenant = await tenant.save();
     
@@ -208,16 +203,6 @@ exports.updateTenant = async (req, res) => {
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
-
-      
-      // tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
-      // tenant.fixed_light_bill = req.body.fixed_light_bill || tenant.fixed_light_bill;
-
-      // if (req.body.current_meter_reading) {
-      //   tenant.total_light_bill = req.body.current_meter_reading;
-      // } else if (req.body.fixed_light_bill) {
-      //   tenant.total_light_bill = req.body.fixed_light_bill;
-      // }
 
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
