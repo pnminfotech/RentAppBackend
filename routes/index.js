@@ -11,7 +11,7 @@ const adminRoutes = require('./adminRoutes');
 
 
 // Define routes
-router.use('/api/admin', adminRoutes);
+router.use('/admin', adminRoutes);
 router.use("/societies", societyRoutes);
 router.use("/wings", wingRoutes);
 router.use("/flats", flatRoutes);

@@ -15,7 +15,7 @@ exports.getAllTenants = async (req, res) => {
 exports.getAllRentReceivedTenants = async (req, res) => {
   try {
     const tenantRentReceived = await Tenant.find({ rent_status: "paid" });
-    res.json({tenantRentReceived:tenantRentReceived.length});
+    res.json({tenantRentReceived});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -25,7 +25,7 @@ exports.getAllRentReceivedTenants = async (req, res) => {
 exports.getAllRentPendingTenants = async (req, res) => {
   try {
     const tenantRentPending = await Tenant.find({ rent_status: "pending" });
-    res.json({tenantRentPending:tenantRentPending.length});
+    res.json({tenantRentPending});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -151,6 +151,7 @@ exports.createTenant = async (req, res) => {
       adhar_back: files.adhar_back[0].path,
       pan_photo: files.pan_photo[0].path,
       electricity_bill: files.electricity_bill[0].path,
+      
     });
 
     // Check only required fields and ignore unnecessary ones
@@ -203,7 +204,7 @@ exports.updateTenant = async (req, res) => {
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
-
+     
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
     } else {
