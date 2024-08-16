@@ -32,7 +32,7 @@ exports.getRentedFlats = async (req, res) => {
 exports.getVaccantFlats = async (req, res) => {
   try {
     const vaccantFlats = await Flats.find({ flat_status: "vaccant" });
-    res.json({vaccantFlats : vaccantFlats.length});
+    res.json({vaccantFlats});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
