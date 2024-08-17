@@ -93,8 +93,8 @@ exports.createTenant = async (req, res) => {
       reference_person1_age,
       reference_person2_age,
       agent_name,
-      flat_id = req.params.id,
       rent_status='pending',
+      flat_id = req.params.id,
     } = req.body;
 
     // console.log(files);
