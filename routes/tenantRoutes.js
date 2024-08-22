@@ -25,16 +25,19 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: storage,
-  fileFilter: fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit for each file
-  }
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg" && ext !== ".pdf") {
+      return cb(new Error("Only images and PDF files are allowed"), false);
+    }
+    cb(null, true);
+  },
 }).fields([
-  { name: 'tenant_photo', maxCount: 1 },
-  { name: 'adhar_front', maxCount: 1 },
-  { name: 'adhar_back', maxCount: 1 },
-  { name: 'pan_photo', maxCount: 1 },
-  { name: 'electricity_bill', maxCount: 1 }
+  { name: "tenant_photo", maxCount: 1 },
+  { name: "adhar_front", maxCount: 1 },
+  { name: "adhar_back", maxCount: 1 },
+  { name: "pan_photo", maxCount: 1 },
+  { name: "electricity_bill", maxCount: 1 },
 ]);
 
 // Existing routes
@@ -44,10 +47,16 @@ router.get('/rent-pending', TenantController.getAllRentPendingTenants);
 router.get("/:id", TenantController.getTenantById);
 router.get("/tenants-by-flat/:id", TenantController.getTenantByFlatId);
 
+router.put('/:id', TenantController.rentStatusChange)
+
 router.post(
   "/add-tenant-by-flat/:id",
   (req, res, next) => {    
-    console.log(req.body);
+
+    console.log("Incoming Request Body:", req.body);
+    console.log("Incoming Request Files:", req.files);  // Should show file data here
+    console.log("Request Params:", req.params);
+
     upload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         console.error("MulterError:", err);

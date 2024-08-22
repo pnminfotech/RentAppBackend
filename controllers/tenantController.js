@@ -63,8 +63,11 @@ exports.getTenantByFlatId = async (req, res) => {
 };
 
 exports.createTenant = async (req, res) => {
-  const files = req.body.files;
-  console.log(req.params);
+  const files = req.files;
+  console.log("Request Files:", files);
+  console.log("Request Params:", req.params);
+  // console.log("Request Body:", req.body);
+  // console.log(req.params);
   
   try {
     const {
@@ -93,21 +96,28 @@ exports.createTenant = async (req, res) => {
       reference_person1_age,
       reference_person2_age,
       agent_name,
-      rent_status='pending',
-      flat_id = req.params.id,
+      rent_status,
+      flat_id,
+      active,
+      rentPaid,
     } = req.body;
+    
+    // if (
+    //   !files ||
+    //   !files.tenant_photo ||
+    //   !files.adhar_front ||
+    //   !files.adhar_back ||
+    //   !files.pan_photo ||
+    //   !files.electricity_bill
+    // ) {
+    //   return res.status(400).json({ message: "All file fields are required." });
+    // }
 
-    // console.log(files);
-    if (
-      !files ||
-      !files.tenant_photo ||
-      !files.adhar_front ||
-      !files.adhar_back ||
-      !files.pan_photo ||
-      !files.electricity_bill
-    ) {
+
+    if (!req.files || !req.files.tenant_photo || !req.files.adhar_front || !req.files.adhar_back || !req.files.pan_photo || !req.files.electricity_bill) {
       return res.status(400).json({ message: "All file fields are required." });
     }
+
 
     const tenant = new Tenant({
       name,
@@ -137,11 +147,13 @@ exports.createTenant = async (req, res) => {
       agent_name,
       rent_status,
       flat_id,
-      tenant_photo: files.tenant_photo[0].path,
-      adhar_front: files.adhar_front[0].path,
-      adhar_back: files.adhar_back[0].path,
-      pan_photo: files.pan_photo[0].path,
-      electricity_bill: files.electricity_bill[0].path, 
+      active,
+      rentPaid,
+      tenant_photo: req.files.tenant_photo ? req.files.tenant_photo[0].path : undefined,
+      adhar_front: req.files.adhar_front ? req.files.adhar_front[0].path : undefined,
+      adhar_back: req.files.adhar_back ? req.files.adhar_back[0].path : undefined,
+      pan_photo: req.files.pan_photo ? req.files.pan_photo[0].path : undefined,
+      electricity_bill: req.files.electricity_bill ? req.files.electricity_bill[0].path : undefined,
     });
 
     // Check only required fields and ignore unnecessary ones
@@ -150,13 +162,15 @@ exports.createTenant = async (req, res) => {
     res.status(201).json(newTenant);
   } catch (err) {
     // If there's an error, delete the uploaded files to prevent orphan files
-    Object.values(files).forEach((fileArray) => {
-      fileArray.forEach((file) => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error(`Error deleting file: ${file.path}`);
+     if (files) {
+      Object.values(files).forEach((fileArray) => {
+        fileArray.forEach((file) => {
+          fs.unlink(file.path, (unlinkErr) => {
+            if (unlinkErr) console.error(`Error deleting file: ${file.path}`);
+          });
         });
       });
-    });
+    }
     res.status(400).json({ message: err.message });
   }
 };
@@ -313,6 +327,28 @@ exports.deactiveTenant = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+exports.rentStatusChange = async (req, res) => {
+  try {
+    const tenantId = req.params.id;
+    const { rent_status } = req.body;
+
+    // Find the tenant by ID and update their rent_status
+    const updatedTenant = await Tenant.findByIdAndUpdate(
+      tenantId,
+      { rent_status },
+      { new: true }
+    );
+
+    if (!updatedTenant) {
+      return res.status(404).json({ message: 'Tenant not found' });
+    }
+
+    res.status(200).json(updatedTenant);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
   }
 };
 

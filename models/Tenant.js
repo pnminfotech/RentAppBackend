@@ -32,12 +32,14 @@ const tenantsSchema = new mongoose.Schema(
       ref: "Flats",
       required: true,
     },
-    rent_status: { type: String, required: true },
+    rent_status: { type: String, enum: ['paid', 'pending'], default: 'paid' },
     tenant_photo: { type: String },
     adhar_front: { type: String },
     adhar_back: { type: String },
     pan_photo: { type: String },
     electricity_bill: { type: String },
+    active: { type: Boolean, default: true }, // New field
+    rentPaid: { type: Boolean, default: false }, 
   },
   {
     collection: "Tenants",
