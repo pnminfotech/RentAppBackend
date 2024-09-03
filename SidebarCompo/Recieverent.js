@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image } from "react-native";
+import moment from "moment";
 
 const Recieverent = () => {
   const [rentPaidTenants, setRentPaidTenants] = useState([]);
@@ -19,18 +13,31 @@ const Recieverent = () => {
         const response = await fetch(
           "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-received"
         );
-
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error("Network response was not ok");
         }
-
         const data = await response.json();
-        console.log(data); // Log the response data
-        setRentPaidTenants(data);
-        setLoading(false);
+
+        const updatedTenants = data.tenantRentReceived.map((tenant) => {
+          const currentDate = moment();
+          const rentFromDate = moment(tenant.rent_form_date);
+          const daysDiff = currentDate.diff(rentFromDate, "days");
+          console.log(`Days Difference: ${daysDiff}`);
+  
+          if (daysDiff > 30) {
+            tenant.rent_status = "pending";
+            // console.log(`Rent status for ${tenant.name} set to pending.`);
+            updateTenantStatus(tenant); 
+          } else {
+            tenant.rent_status = "paid";
+          }
+          return tenant;
+        });
+
+        setRentPaidTenants(updatedTenants);
       } catch (error) {
-        console.error("Error fetching rent received tenants:", error);
         setError(error.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -38,8 +45,46 @@ const Recieverent = () => {
     fetchRentPaidTenants();
   }, []);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.tenantItem}>
+
+  const updateTenantStatus = async (tenant) => {
+    try {
+      const response = await fetch(
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${tenant._id}`,
+        {
+          method: "PUT", // or "PATCH"
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ rent_status: tenant.rent_status }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update tenant rent status");
+      }
+    } catch (error) {
+      console.error("Error updating rent status:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  const renderTenantItem = ({ item }) => (
+    <View style={styles.item}>
       <Image
         source={
           item.gender === "female"
@@ -48,72 +93,56 @@ const Recieverent = () => {
         }
         style={styles.image}
       />
-      <View style={styles.tenantDetails}>
-        <Text style={styles.tenantName}>{item.name}</Text>
-        <Text style={styles.tenantRentStatus}>Rent Paid</Text>
+      <View style={styles.details}>
+        <Text style={styles.name}>{item.name}</Text>
+        <Text>{item.emailId}</Text>
+        <Text>Phone: {item.ph_no}</Text>
+        <Text>Status: {item.rent_status}</Text>
       </View>
     </View>
   );
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error fetching data: {error}</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
       <FlatList
         data={rentPaidTenants}
-        renderItem={renderItem}
         keyExtractor={(item) => item._id}
+        renderItem={renderTenantItem}
       />
     </View>
   );
 };
 
-export default Recieverent;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#fff",
   },
-  tenantItem: {
+  item: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
     padding: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
   image: {
     width: 60,
-    height: 80,
+    height: 60,
     borderRadius: 30,
-    marginRight: 16,
+    marginRight: 10,
   },
-  tenantDetails: {
+  details: {
     flex: 1,
+    justifyContent: "center",
   },
-  tenantName: {
-    fontSize: 18,
+  name: {
     fontWeight: "bold",
-    color: "#333",
   },
-  tenantRentStatus: {
-    fontSize: 14,
-    color: "green",
+  errorText: {
+    color: "red",
   },
 });
+
+export default Recieverent;

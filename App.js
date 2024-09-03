@@ -13,7 +13,7 @@ import Room from './SidebarCompo/Room';
 import Totalbuildings from './SidebarCompo/Totalbuildings';
 import Userdetails from './SidebarCompo/Userdetails';
 import Wings from './SidebarCompo/Wings';
-import Expense from './SideCompo/Expense';
+// import Expense from './SideCompo/Expense';
 import ManageFlats from './SideCompo/ManageFlats';
 import ManageSociety from './SideCompo/ManageSociety';
 import ManageTenants from './SideCompo/ManageTenants.js';
@@ -21,6 +21,7 @@ import ManageWings from './SideCompo/ManageWings.js';
 import Report from './SideCompo/Report';
 import Tenant from './SideCompo/Tenant';
 import RentStatus from './SideCompo/RentStatus';
+import Expenses from './SideCompo/Expenses';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,7 +52,7 @@ export default function App() {
         <Stack.Screen name="ManageFlats" component={ManageFlats} />
         <Stack.Screen name="Report" component={Report} />
         <Stack.Screen name="Tenant" component={Tenant} />
-        <Stack.Screen name="Expense" component={Expense} />
+        <Stack.Screen name="Expenses" component={Expenses} />
         <Stack.Screen name="ManageTenants" component={ManageTenants} />
         <Stack.Screen name="Wings" component={Wings} />
         <Stack.Screen name="Userdetails" component={Userdetails} />

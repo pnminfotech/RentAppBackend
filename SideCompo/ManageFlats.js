@@ -27,6 +27,7 @@ const ManageFlats = ({ navigation }) => {
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [flatName, setFlatName] = useState("");
   const [flatType, setFlatType] = useState("");
+  const [amount, setAmount] = useState("");
 
   useEffect(() => {
     fetchSocieties();
@@ -106,11 +107,12 @@ const ManageFlats = ({ navigation }) => {
     setSelectedWing(wingId); // Store selected wing ID
     setFlatName("");
     setFlatType("");
+    setAmount("");
     setAddModalVisible(true); // Open the add flat modal
   };
 
   const saveFlat = () => {
-    if (!selectedWing || !flatName) {
+    if (!selectedWing || !flatName || !flatType || !amount) {
       console.error("Invalid wing ID or flat name");
       return;
     }
@@ -153,7 +155,7 @@ const ManageFlats = ({ navigation }) => {
             if (wing._id === selectedWing) {
               return {
                 ...wing,
-                flats: [...wing.flats, newFlat], // Add the new flat to the existing flats
+                flats: [...wing.flats, newFlat], // Add the new flat to the existing flats        
               };
             }
             return wing;
@@ -168,6 +170,7 @@ const ManageFlats = ({ navigation }) => {
         setAddModalVisible(false);
         setFlatName("");
         setFlatType("");
+        setAmount("");
       })
       .catch((error) => {
         console.error("Error adding flat:", error);
@@ -186,6 +189,7 @@ const ManageFlats = ({ navigation }) => {
         setSelectedFlat({ flatId, wingId });
         setFlatName(flatToEdit.name);
         setFlatType(flatToEdit.flat_type);
+        setAmount(flatToEdit.amount);
         setEditModalVisible(true);
       } else {
         console.error("Flat not found");
@@ -208,7 +212,7 @@ const ManageFlats = ({ navigation }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: flatName, flat_type: flatType }),
+        body: JSON.stringify({ name: flatName, flat_type: flatType ,amount : amount}),
       }
     )
       .then((response) => {
@@ -244,6 +248,7 @@ const ManageFlats = ({ navigation }) => {
         setEditModalVisible(false);
         setFlatName("");
         setFlatType("");
+        setAmount("");
         setSelectedFlat(null);
       })
       .catch((error) => {
@@ -320,7 +325,7 @@ const ManageFlats = ({ navigation }) => {
               style={styles.input}
               value={flatType}
               onChangeText={setFlatType}
-              placeholder="Enter Flat Name"
+              placeholder="Enter Flat type"
             />
             <View style={styles.modalButtons}>
               <TouchableOpacity
@@ -392,9 +397,7 @@ const ManageFlats = ({ navigation }) => {
                               style={styles.flatImage}
                             />
                             <Text style={styles.flatName}>{flat.name}</Text>
-                            <Text style={styles.flatName}>
-                              {flat.flat_type}
-                            </Text>
+                            <Text style={styles.flatName}>{flat.flat_type}</Text>
                             <View style={styles.flatIcons}>
                               <TouchableOpacity
                                 onPress={() => editFlat(flat._id, wing._id)}

@@ -6,19 +6,37 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-
+import axios from "axios";
+import { Alert } from 'react-native';
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    // Implement your login logic here, e.g., authentication with server
+  const handleLogin = async () => {
 
-    // For demo purposes, log the username and password to console
-    console.log("Username:", username);
-    console.log("Password:", password);
+    // console.log(username , password)
+   
+    // const userData={
+    //   username:username,
+    //   password,
+    // }
+    // try {
+    //   // Send a POST request to the server with user data
+    //   const response = await axios.post("http://192.168.0.98:3000/api/login", userData);
 
-    // Navigate to Home screen upon successful login
+    //   console.log(response.data); // For debugging: Show the response in the console
+
+    //   if (response.data.success) {
+    //     // If login is successful, navigate to the Home screen
+    //     navigation.navigate("Home");
+    //   } else {
+    //     // If login fails, show an alert with the error message
+    //     Alert.alert("Login Failed", response.data.message);
+    //   }
+    // } catch (error) {
+    //   console.error("Error during login:", error);
+    //   Alert.alert("Login Error", "An error occurred during login. Please try again.");
+    // }
     navigation.navigate("Home");
   };
 
@@ -29,14 +47,14 @@ const LoginScreen = ({ navigation }) => {
         style={styles.input}
         placeholder="Username"
         value={username}
-        onChangeText={setUsername}
+        onChange={e => setUsername(e.nativeEvent.text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry={true}
         value={password}
-        onChangeText={setPassword}
+        onChange={e => setPassword(e.nativeEvent.text)}
       />
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>

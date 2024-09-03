@@ -19,24 +19,31 @@ const Pendingstatus = () => {
         const response = await fetch(
           "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"
         );
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
+  
         const data = await response.json();
-        console.log(data); // Log the response data
-        setRentPendingTenants(data);
-        setLoading(false);
+        console.log(data); // Log the response data to verify the structure
+  
+        // Check if data is an array or has a specific structure
+        const tenantsWithPendingRent = Array.isArray(data)
+          ? data.filter(tenant => tenant.rent_status === "pending")
+          : data.tenantRentPending.filter(tenant => tenant.rent_status === "pending");
+          
+        setRentPendingTenants(tenantsWithPendingRent);
       } catch (error) {
         console.error("Error fetching rent pending tenants:", error);
         setError(error.message);
+      } finally {
         setLoading(false);
       }
     };
-
+  
     fetchRentPendingTenants();
   }, []);
+  
 
   const renderItem = ({ item }) => (
     <View style={styles.tenantItem}>
@@ -50,22 +57,29 @@ const Pendingstatus = () => {
       />
       <View style={styles.tenantDetails}>
         <Text style={styles.tenantName}>{item.name}</Text>
+        <Text>{item.final_rent}</Text>
+        <Text style={styles.tenantName}>{item.ph_no}</Text>
         <Text style={styles.tenantRentStatus}>Rent Pending</Text>
       </View>
     </View>
   );
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //       <Text>Loading...</Text>
+  //     </View>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error fetching data: {error}</Text>
-      </View>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <View style={styles.container}>
+  //       <Text>Error fetching data: {error}</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
@@ -78,12 +92,11 @@ const Pendingstatus = () => {
   );
 };
 
-export default Pendingstatus;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: "#fff",
   },
   tenantItem: {
     flexDirection: "row",
@@ -100,7 +113,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 60,
-    height: 80,
+    height: 60,
     borderRadius: 30,
     marginRight: 16,
   },
@@ -117,3 +130,5 @@ const styles = StyleSheet.create({
     color: "red",
   },
 });
+
+export default Pendingstatus;

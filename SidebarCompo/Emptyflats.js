@@ -1,26 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet,
-  Text,
   View,
-  Image,
+  Text,
   FlatList,
+  Image,
+  StyleSheet,
   ActivityIndicator,
 } from "react-native";
 
-const EmptyFlats = () => {
-  const [vacantFlats, setVacantFlats] = useState([]);
+// Import the local image
+import flatImage from "../assets/images/flats.jpg";
+
+const FlatsOnRentScreen = () => {
+  const [flatsOnRent, setFlatsOnRent] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchVacantFlats = async () => {
+    const fetchAllottedFlats = async () => {
       try {
         const response = await fetch(
           "https://stock-management-system-server-6mja.onrender.com/api/flats/vaccant"
         );
-        const data = await response.json();
-        console.log(data); // Log the response data
-        setVacantFlats(data); // Set the array of vacant flats
+        const flatsData = await response.json();
+        console.log("Fetched vacant flats:", flatsData); // Debug log
+
+        // If the backend returns an object with a key, adjust here.
+        setFlatsOnRent(flatsData.vaccantFlats || flatsData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching vacant flats:", error);
@@ -28,73 +33,86 @@ const EmptyFlats = () => {
       }
     };
 
-    fetchVacantFlats();
+    fetchAllottedFlats();
   }, []);
 
-  const renderItem = ({ item }) => (
-    <View style={styles.flatItem}>
-      <Image
-        source={require("../assets/images/flats.jpg")}
-        style={styles.image}
-      />
-      <View style={styles.flatDetails}>
-        <Text style={styles.flatName}>{item.name}</Text>
-        <Text style={styles.flatStatus}>Vacant</Text>
-      </View>
-    </View>
-  );
-
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (flatsOnRent.length === 0) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>No vacant flats found</Text>
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={vacantFlats}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
+        data={flatsOnRent}
+        keyExtractor={(item) => item._id.toString()} // Adjust key as per your flat schema
+        renderItem={({ item }) => (
+          <View style={styles.flatItem}>
+            <Image source={flatImage} style={styles.flatImage} />
+            <View style={styles.flatDetails}>
+              <Text style={styles.flatName}>{item.name}</Text>
+              <Text style={styles.flatRentStatus}>
+                Vacant
+              </Text>
+            </View>
+          </View>
+        )}
       />
     </View>
   );
 };
 
-export default EmptyFlats;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
+    backgroundColor: "#f8f8f8",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   flatItem: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
     padding: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 8,
+    marginVertical: 5,
+    backgroundColor: "#fff",
+    borderRadius: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowRadius: 5,
+    elevation: 3,
   },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
+  flatImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 5,
   },
   flatDetails: {
-    flex: 1,
+    marginLeft: 10,
+    justifyContent: "center",
   },
   flatName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
   },
-  flatStatus: {
+  flatRentStatus: {
     fontSize: 14,
     color: "green",
   },
 });
+
+export default FlatsOnRentScreen;

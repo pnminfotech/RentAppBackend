@@ -20,6 +20,7 @@ const Flats = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [flatName, setFlatName] = useState("");
   const [flatType, setFlatType] = useState("");
+  const [amount, setAmount] = useState('');
 
   useEffect(() => {
     fetch(`${API_URL}/api/flats/flats-by-wings/${societyId}`)
@@ -41,7 +42,7 @@ const Flats = ({ route, navigation }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name: flatName, type: flatType }),
+          body: JSON.stringify({ name: flatName, flat_type: flatType, amount:  amount }),
         }
       );
 
@@ -50,10 +51,13 @@ const Flats = ({ route, navigation }) => {
       }
 
       const newFlat = await response.json();
+      newFlat.society_id = societyId;
+
       setFlats([...flats, newFlat]);
       Alert.alert("Flat added successfully");
       setFlatName("");
       setFlatType("");
+      setAmount("");
       setIsModalVisible(false);
     } catch (error) {
       console.error("Error adding flat:", error);
@@ -62,7 +66,7 @@ const Flats = ({ route, navigation }) => {
   };
 
   const handleFlatPress = (flat) => {
-    navigation.navigate("Userdetails", { flat });
+    navigation.navigate("Userdetails", { flatId: flat._id });
   };
 
   const renderFlats = () => {
@@ -79,6 +83,7 @@ const Flats = ({ route, navigation }) => {
               style={styles.buildingImage}
             />
             <Text style={styles.buildingName}>{flat.name}</Text>
+            <Text style={styles.buildingName}>{flat.amount}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -123,6 +128,14 @@ const Flats = ({ route, navigation }) => {
               value={flatType}
               placeholder={{ label: "Select Flat Type", value: null }}
             />
+             <TextInput
+          style={styles.input}
+          placeholder="Enter Amount"
+          value={amount}
+          onChangeText={(text) => setAmount(text)}
+          editable={true}
+          keyboardType="numeric"
+        />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
@@ -233,6 +246,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
     minHeight: 40,
+    marginTop:20,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -272,7 +286,12 @@ const styles = StyleSheet.create({
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
-    paddingVertical: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    paddingVertical: 20,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "gray",
@@ -280,18 +299,18 @@ const pickerSelectStyles = StyleSheet.create({
     color: "black",
     paddingRight: 30, // to ensure the text is never behind the icon
     width: "100%",
-    marginBottom: 20,
+    // marginBottom: 10,
   },
   inputAndroid: {
     fontSize: 16,
     paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingVertical: 20,
     borderWidth: 0.5,
     borderColor: "gray",
-    borderRadius: 8,
+    borderRadius: 4,
     color: "black",
     paddingRight: 30, // to ensure the text is never behind the icon
     width: "100%",
-    marginBottom: 20,
+    // marginBottom: 20,
   },
 });
