@@ -102,19 +102,14 @@ exports.createTenant = async (req, res) => {
       rentPaid,
     } = req.body;
     
-    // if (
-    //   !files ||
-    //   !files.tenant_photo ||
-    //   !files.adhar_front ||
-    //   !files.adhar_back ||
-    //   !files.pan_photo ||
-    //   !files.electricity_bill
-    // ) {
-    //   return res.status(400).json({ message: "All file fields are required." });
-    // }
-
-
-    if (!req.files || !req.files.tenant_photo || !req.files.adhar_front || !req.files.adhar_back || !req.files.pan_photo || !req.files.electricity_bill) {
+    if (
+      !files ||
+      !files.tenant_photo ||
+      !files.adhar_front ||
+      !files.adhar_back ||
+      !files.pan_photo ||
+      !files.electricity_bill
+    ) {
       return res.status(400).json({ message: "All file fields are required." });
     }
 
@@ -149,28 +144,29 @@ exports.createTenant = async (req, res) => {
       flat_id,
       active,
       rentPaid,
-      tenant_photo: req.files.tenant_photo ? req.files.tenant_photo[0].path : undefined,
-      adhar_front: req.files.adhar_front ? req.files.adhar_front[0].path : undefined,
-      adhar_back: req.files.adhar_back ? req.files.adhar_back[0].path : undefined,
-      pan_photo: req.files.pan_photo ? req.files.pan_photo[0].path : undefined,
-      electricity_bill: req.files.electricity_bill ? req.files.electricity_bill[0].path : undefined,
+      tenant_photo: files.tenant_photo[0].path,
+      adhar_front: files.adhar_front[0].path,
+      adhar_back: files.adhar_back[0].path,
+      pan_photo: files.pan_photo[0].path,
+      electricity_bill: files.electricity_bill[0].path,
     });
 
     // Check only required fields and ignore unnecessary ones
     const newTenant = await tenant.save();
-    
+    const flat = await Flats.findById(flat_id);
+    //   flat.flat_status = "vacant";
+    // const updatedFlat = await flat.save();
+
     res.status(201).json(newTenant);
   } catch (err) {
     // If there's an error, delete the uploaded files to prevent orphan files
-     if (files) {
-      Object.values(files).forEach((fileArray) => {
-        fileArray.forEach((file) => {
-          fs.unlink(file.path, (unlinkErr) => {
-            if (unlinkErr) console.error(`Error deleting file: ${file.path}`);
-          });
+    Object.values(files).forEach((fileArray) => {
+      fileArray.forEach((file) => {
+        fs.unlink(file.path, (err) => {
+          if (err) console.error(`Error deleting file: ${file.path}`);
         });
       });
-    }
+    });
     res.status(400).json({ message: err.message });
   }
 };

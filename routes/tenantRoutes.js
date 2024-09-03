@@ -14,15 +14,6 @@ const storage = multer.diskStorage({
   },
 });
 
-
-const fileFilter = (req, file, cb) => {
-  const ext = path.extname(file.originalname).toLowerCase();
-  if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.pdf') {
-    return cb(new Error('Only images and PDF files are allowed'), false);
-  }
-  cb(null, true);
-};
-
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {

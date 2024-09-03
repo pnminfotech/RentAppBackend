@@ -8,6 +8,7 @@ const flatRoutes = require("./flatRoutes");
 const tenantRoutes = require("./tenantRoutes");
 const paymentRoutes = require("./paymentRoutes");
 const adminRoutes = require('./adminRoutes');
+const loginRoutes = require('./loginRoutes')
 
 
 // Define routes
@@ -17,6 +18,7 @@ router.use("/wings", wingRoutes);
 router.use("/flats", flatRoutes);
 router.use("/tenants", tenantRoutes);
 router.use("/payments", paymentRoutes);
+router.use("/login", loginRoutes)
 
 
 module.exports = router;
