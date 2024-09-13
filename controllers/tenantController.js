@@ -95,12 +95,11 @@ exports.createTenant = async (req, res) => {
       reference_person2_age,
       agent_name,
       rent_status,
-
       active,
       rentPaid,
     } = req.body;
 
-    // List of required file fields
+    // Check for missing files
     const requiredFiles = [
       "tenant_photo",
       "adhar_front",
@@ -109,7 +108,6 @@ exports.createTenant = async (req, res) => {
       "electricity_bill",
     ];
 
-    // Collect missing file fields
     const missingFiles = requiredFiles.filter(
       (fileField) => !files || !files[fileField]
     );
@@ -122,6 +120,7 @@ exports.createTenant = async (req, res) => {
       });
     }
 
+    // Create the tenant
     const tenant = new Tenant({
       name,
       ph_no,
@@ -161,11 +160,14 @@ exports.createTenant = async (req, res) => {
 
     // Save the tenant
     const newTenant = await tenant.save();
-    // const flat = await Flats.findById(flat_id);
 
-    res.status(201).json(newTenant);
+    // Send a success message back to the front-end
+    return res.status(201).json({
+      message: "Tenant created successfully!",
+      tenant: newTenant,
+    });
   } catch (err) {
-    // If there's an error, delete the uploaded files to prevent orphan files
+    // Handle error
     if (files) {
       Object.values(files).forEach((fileArray) => {
         fileArray.forEach((file) => {
@@ -175,7 +177,7 @@ exports.createTenant = async (req, res) => {
         });
       });
     }
-    res.status(400).json({ message: err.message });
+    return res.status(400).json({ message: err.message });
   }
 };
 
