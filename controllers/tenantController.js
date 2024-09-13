@@ -1,4 +1,4 @@
-// controllers/tenantController.js    
+// controllers/tenantController.js
 const Tenant = require("../models/Tenant");
 const Flats = require("../models/Flat");
 const fs = require("fs");
@@ -15,7 +15,7 @@ exports.getAllTenants = async (req, res) => {
 exports.getAllRentReceivedTenants = async (req, res) => {
   try {
     const tenantRentReceived = await Tenant.find({ rent_status: "paid" });
-    res.json({tenantRentReceived});
+    res.json({ tenantRentReceived });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -24,11 +24,11 @@ exports.getAllRentReceivedTenants = async (req, res) => {
 
 exports.getAllRentPendingTenants = async (req, res) => {
   try {
-    const tenantRentPending = await Tenant.find({ rent_status: 'pending' });
+    const tenantRentPending = await Tenant.find({ rent_status: "pending" });
     res.json(tenantRentPending);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server Error' });
+    res.status(500).json({ error: "Server Error" });
   }
 };
 
@@ -66,9 +66,7 @@ exports.createTenant = async (req, res) => {
   const files = req.files;
   console.log("Request Files:", files);
   console.log("Request Params:", req.params);
-  // console.log("Request Body:", req.body);
-  // console.log(req.params);
-  
+
   try {
     const {
       name,
@@ -101,18 +99,28 @@ exports.createTenant = async (req, res) => {
       active,
       rentPaid,
     } = req.body;
-    
-    if (
-      !files ||
-      !files.tenant_photo ||
-      !files.adhar_front ||
-      !files.adhar_back ||
-      !files.pan_photo ||
-      !files.electricity_bill
-    ) {
-      return res.status(400).json({ message: "All file fields are required." });
-    }
 
+    // List of required file fields
+    const requiredFiles = [
+      "tenant_photo",
+      "adhar_front",
+      "adhar_back",
+      "pan_photo",
+      "electricity_bill",
+    ];
+
+    // Collect missing file fields
+    const missingFiles = requiredFiles.filter(
+      (fileField) => !files || !files[fileField]
+    );
+
+    if (missingFiles.length > 0) {
+      return res.status(400).json({
+        message: `The following file fields are missing: ${missingFiles.join(
+          ", "
+        )}`,
+      });
+    }
 
     const tenant = new Tenant({
       name,
@@ -151,26 +159,25 @@ exports.createTenant = async (req, res) => {
       electricity_bill: files.electricity_bill[0].path,
     });
 
-    // Check only required fields and ignore unnecessary ones
+    // Save the tenant
     const newTenant = await tenant.save();
     const flat = await Flats.findById(flat_id);
-    //   flat.flat_status = "vacant";
-    // const updatedFlat = await flat.save();
 
     res.status(201).json(newTenant);
   } catch (err) {
     // If there's an error, delete the uploaded files to prevent orphan files
-    Object.values(files).forEach((fileArray) => {
-      fileArray.forEach((file) => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error(`Error deleting file: ${file.path}`);
+    if (files) {
+      Object.values(files).forEach((fileArray) => {
+        fileArray.forEach((file) => {
+          fs.unlink(file.path, (err) => {
+            if (err) console.error(`Error deleting file: ${file.path}`);
+          });
         });
       });
-    });
+    }
     res.status(400).json({ message: err.message });
   }
 };
-
 
 exports.updateTenant = async (req, res) => {
   try {
@@ -185,26 +192,35 @@ exports.updateTenant = async (req, res) => {
       tenant.maintaince = req.body.maintaince || tenant.maintaince;
       tenant.final_rent = req.body.final_rent || tenant.final_rent;
       tenant.deposit = req.body.deposit || tenant.deposit;
-      tenant.current_meter_reading = req.body.current_meter_reading || tenant.current_meter_reading;
+      tenant.current_meter_reading =
+        req.body.current_meter_reading || tenant.current_meter_reading;
       tenant.rent_form_date = req.body.rent_form_date || tenant.rent_form_date;
-      tenant.permanant_address = req.body.permanant_address || tenant.permanant_address;
-      tenant.previous_address = req.body.previous_address || tenant.previous_address;
+      tenant.permanant_address =
+        req.body.permanant_address || tenant.permanant_address;
+      tenant.previous_address =
+        req.body.previous_address || tenant.previous_address;
       tenant.nature_of_work = req.body.nature_of_work || tenant.nature_of_work;
-      tenant.working_address = req.body.working_address || tenant.working_address;
+      tenant.working_address =
+        req.body.working_address || tenant.working_address;
       tenant.work_ph_no = req.body.work_ph_no || tenant.work_ph_no;
       tenant.family_members = req.body.family_members || tenant.family_members;
       tenant.male_members = req.body.male_members || tenant.male_members;
       tenant.female_members = req.body.female_members || tenant.female_members;
       tenant.childs = req.body.childs || tenant.childs;
-      tenant.family_member_names = req.body.family_member_names || tenant.family_member_names;
-      tenant.reference_person1 = req.body.reference_person1 || tenant.reference_person1;
-      tenant.reference_person2 = req.body.reference_person2 || tenant.reference_person2;
-      tenant.reference_person1_age = req.body.reference_person1_age || tenant.reference_person1_age;
-      tenant.reference_person2_age = req.body.reference_person2_age || tenant.reference_person2_age;
+      tenant.family_member_names =
+        req.body.family_member_names || tenant.family_member_names;
+      tenant.reference_person1 =
+        req.body.reference_person1 || tenant.reference_person1;
+      tenant.reference_person2 =
+        req.body.reference_person2 || tenant.reference_person2;
+      tenant.reference_person1_age =
+        req.body.reference_person1_age || tenant.reference_person1_age;
+      tenant.reference_person2_age =
+        req.body.reference_person2_age || tenant.reference_person2_age;
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
-     
+
       const updatedTenant = await tenant.save();
       res.json(updatedTenant);
     } else {
@@ -339,12 +355,12 @@ exports.rentStatusChange = async (req, res) => {
     );
 
     if (!updatedTenant) {
-      return res.status(404).json({ message: 'Tenant not found' });
+      return res.status(404).json({ message: "Tenant not found" });
     }
 
     res.status(200).json(updatedTenant);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: "Server error", error });
   }
 };
 
