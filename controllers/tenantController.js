@@ -95,7 +95,7 @@ exports.createTenant = async (req, res) => {
       reference_person2_age,
       agent_name,
       rent_status,
-      flat_id,
+
       active,
       rentPaid,
     } = req.body;
@@ -149,7 +149,7 @@ exports.createTenant = async (req, res) => {
       reference_person2_age,
       agent_name,
       rent_status,
-      flat_id,
+      flat_id: req.params.id,
       active,
       rentPaid,
       tenant_photo: files.tenant_photo[0].path,
@@ -161,7 +161,7 @@ exports.createTenant = async (req, res) => {
 
     // Save the tenant
     const newTenant = await tenant.save();
-    const flat = await Flats.findById(flat_id);
+    // const flat = await Flats.findById(flat_id);
 
     res.status(201).json(newTenant);
   } catch (err) {
