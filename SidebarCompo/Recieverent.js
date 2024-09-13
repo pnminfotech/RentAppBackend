@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image } from "react-native";
 import moment from "moment";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 const Recieverent = () => {
   const [rentPaidTenants, setRentPaidTenants] = useState([]);
@@ -11,7 +18,7 @@ const Recieverent = () => {
     const fetchRentPaidTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-received"
+          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -23,11 +30,11 @@ const Recieverent = () => {
           const rentFromDate = moment(tenant.rent_form_date);
           const daysDiff = currentDate.diff(rentFromDate, "days");
           console.log(`Days Difference: ${daysDiff}`);
-  
+
           if (daysDiff > 30) {
             tenant.rent_status = "pending";
             // console.log(`Rent status for ${tenant.name} set to pending.`);
-            updateTenantStatus(tenant); 
+            updateTenantStatus(tenant);
           } else {
             tenant.rent_status = "paid";
           }
@@ -45,11 +52,10 @@ const Recieverent = () => {
     fetchRentPaidTenants();
   }, []);
 
-
   const updateTenantStatus = async (tenant) => {
     try {
       const response = await fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${tenant._id}`,
+        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${tenant._id}`,
         {
           method: "PUT", // or "PATCH"
           headers: {

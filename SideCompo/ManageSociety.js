@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { FontAwesome } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
+  Alert,
   Image,
   Modal,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons"; // Import FontAwesome for icons
 
 const Totalbuildings = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -23,7 +23,7 @@ const Totalbuildings = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      "https://stock-management-system-server-6mja.onrender.com/api/societies"
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
     )
       .then((response) => response.json())
       .then((data) => setBuildingsData(data))
@@ -44,8 +44,8 @@ const Totalbuildings = ({ navigation }) => {
     };
 
     const url = selectedBuilding
-      ? `https://stock-management-system-server-6mja.onrender.com/api/societies/${selectedBuilding._id}`
-      : "https://stock-management-system-server-6mja.onrender.com/api/societies";
+      ? `https://stock-management-system-server-tmxv.onrender.com/api/societies/${selectedBuilding._id}`
+      : "https://stock-management-system-server-tmxv.onrender.com/api/societies";
 
     const method = selectedBuilding ? "PUT" : "POST";
 
@@ -88,7 +88,7 @@ const Totalbuildings = ({ navigation }) => {
 
   const handleDeleteSociety = () => {
     fetch(
-      `https://stock-management-system-server-6mja.onrender.com/api/societies/${selectedBuilding._id}`,
+      `https://stock-management-system-server-tmxv.onrender.com/api/societies/${selectedBuilding._id}`,
       {
         method: "DELETE",
       }
@@ -254,8 +254,8 @@ const styles = StyleSheet.create({
   buildingItemContainer: {
     flexDirection: "row",
     alignItems: "center",
-      borderWidth: 1,
-    width:"100%",
+    borderWidth: 1,
+    width: "100%",
     borderColor: "#ccc",
     borderRadius: 10,
     padding: 10,
@@ -275,8 +275,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: "row",
-      justifyContent: "flex-end",
-    gap:15,
+    justifyContent: "flex-end",
+    gap: 15,
   },
   addButton: {
     backgroundColor: "#FFBF00",

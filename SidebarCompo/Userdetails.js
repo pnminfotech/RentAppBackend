@@ -1,12 +1,21 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
-import axios from 'axios';
-import * as ImagePicker from 'expo-image-picker';
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
+import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { RadioButton } from "react-native-paper";
 
-const API_URL = "https://stock-management-system-server-6mja.onrender.com";
+const API_URL = "https://stock-management-system-server-tmxv.onrender.com";
 
 export default function Userdetails({ route }) {
   const { flatId } = route.params;
@@ -30,7 +39,7 @@ export default function Userdetails({ route }) {
   const fetchTenants = async () => {
     try {
       const response = await fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/tenants/tenants-by-flat/${flatId}`
+        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/tenants-by-flat/${flatId}`
       );
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -219,7 +228,7 @@ export default function Userdetails({ route }) {
         // Mark tenant rent as paid
         try {
           await axios.patch(
-            `https://stock-management-system-server-6mja.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
+            `https://stock-management-system-server-tmxv.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
             { rent_status: "Paid" }
           );
           setTenants(
@@ -236,7 +245,7 @@ export default function Userdetails({ route }) {
         // Deactivate tenant
         try {
           await axios.patch(
-            `https://stock-management-system-server-6mja.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
+            `https://stock-management-system-server-tmxv.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
             { rent_status: "Deactive" }
           );
           setTenants(
@@ -268,8 +277,6 @@ export default function Userdetails({ route }) {
   const handleUploadPhotos = async () => {
     try {
       const formData = new FormData();
-
-      // Append user details and log the fields as they are appended
       const userFields = [
         "name",
         "rent_status",
@@ -301,11 +308,9 @@ export default function Userdetails({ route }) {
 
       userFields.forEach((field) => {
         const value = userDetails[field];
-        console.log(`${field}: ${value}`); // Log the field and value
         formData.append(field, value);
       });
 
-      // Ensure file objects are selected and appended correctly
       const appendFileToFormData = (fileUri, fieldName) => {
         if (!fileUri) {
           console.warn(`No file provided for ${fieldName}`);
@@ -316,7 +321,6 @@ export default function Userdetails({ route }) {
         const fileExtension = fileName.split(".").pop().toLowerCase();
         let fileType = "";
 
-        // Determine file type based on the extension
         if (fileExtension === "png") fileType = "image/png";
         else if (fileExtension === "jpg" || fileExtension === "jpeg")
           fileType = "image/jpeg";
@@ -328,7 +332,6 @@ export default function Userdetails({ route }) {
           return;
         }
 
-        console.log(`Appending file ${fieldName}: ${fileUri} as ${fileType}`);
         formData.append(fieldName, {
           uri: fileUri,
           type: fileType,
@@ -336,7 +339,6 @@ export default function Userdetails({ route }) {
         });
       };
 
-      // Extract file URIs and append files to formData, logging the files as well
       const {
         tenantPhotoUri,
         adharFrontUri,
@@ -350,40 +352,34 @@ export default function Userdetails({ route }) {
       appendFileToFormData(adharBackUri, "adhar_back");
       appendFileToFormData(panPhotoUri, "pan_photo");
       appendFileToFormData(electricityBillUri, "electricity_bill");
-
-      // Making the API request with logging
-      console.log("Starting upload...");
       const response = await fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/tenants/add-tenant-by-flat/${flatId}`,
+        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/add-tenant-by-flat/${flatId}`,
         {
           method: "POST",
-          body: formData, // Let the browser handle the Content-Type and boundary for multipart data
+          body: formData,
         }
       );
-
-      const contentType = response.headers.get("content-type");
-      let responseData;
+      const responseData = await response.json();
 
       if (response.ok) {
         console.log("Upload successful:", responseData);
+        alert(responseData.message);
+
+        fetchTenants();
+        setAddUserModalVisible(false);
       } else {
         console.error(
           "Upload failed with status:",
           response.status,
-          await response.text()
+          responseData.message
         );
-        throw new Error("Upload failed");
+        throw new Error(responseData.message || "Upload failed");
       }
-
-      // Close modal if upload is successful
-      setAddUserModalVisible(false);
     } catch (error) {
-      // Log any errors that occur during the process
       console.error("Error during upload:", error.message);
+      alert(`Error: ${error.message}`);
     }
   };
-
-  //***************************************************************************
 
   const handleUserSelection = (user) => {
     setSelectedUser(user);
@@ -637,7 +633,7 @@ export default function Userdetails({ route }) {
         animationType="slide"
         transparent={true}
         visible={addUserModalVisible}
-        onRequestClose={() => setAddUserModalVisible(false)}
+        // onRequestClose={() => setAddUserModalVisible(false)}
       >
         <ScrollView
           contentContainerStyle={styles.modalContent}

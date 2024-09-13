@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Image,
-} from "react-native";
+import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
 const Pendingstatus = () => {
   const [rentPendingTenants, setRentPendingTenants] = useState([]);
@@ -17,21 +10,23 @@ const Pendingstatus = () => {
     const fetchRentPendingTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"
+          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
         );
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const data = await response.json();
         console.log(data); // Log the response data to verify the structure
-  
+
         // Check if data is an array or has a specific structure
         const tenantsWithPendingRent = Array.isArray(data)
-          ? data.filter(tenant => tenant.rent_status === "pending")
-          : data.tenantRentPending.filter(tenant => tenant.rent_status === "pending");
-          
+          ? data.filter((tenant) => tenant.rent_status === "pending")
+          : data.tenantRentPending.filter(
+              (tenant) => tenant.rent_status === "pending"
+            );
+
         setRentPendingTenants(tenantsWithPendingRent);
       } catch (error) {
         console.error("Error fetching rent pending tenants:", error);
@@ -40,10 +35,9 @@ const Pendingstatus = () => {
         setLoading(false);
       }
     };
-  
+
     fetchRentPendingTenants();
   }, []);
-  
 
   const renderItem = ({ item }) => (
     <View style={styles.tenantItem}>

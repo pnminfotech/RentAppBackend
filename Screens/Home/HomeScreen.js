@@ -1,6 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Easing,
+  FlatList,
+  Image,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
@@ -8,14 +12,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  Easing,
-  Image,
-  FlatList,
-  ActivityIndicator,
 } from "react-native";
 import { Bars3CenterLeftIcon, BellIcon } from "react-native-heroicons/solid";
-import { useNavigation } from "@react-navigation/native";
-
 
 const propStyle = (percent) => {
   const base_degrees = -135;
@@ -52,27 +50,27 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
-
   useEffect(() => {
     const fetchRentPendingTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"
+          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
         );
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const data = await response.json();
         console.log(data); // Log the response data to verify the structure
-  
+
         // Check if data is an array or has a specific structure
         const tenantsWithPendingRent = Array.isArray(data)
-          ? data.filter(tenant => tenant.rent_status === "pending")
-          : data.tenantRentPending.filter(tenant => tenant.rent_status === "pending");
-          
+          ? data.filter((tenant) => tenant.rent_status === "pending")
+          : data.tenantRentPending.filter(
+              (tenant) => tenant.rent_status === "pending"
+            );
+
         setRentPendingTenants(tenantsWithPendingRent);
       } catch (error) {
         console.error("Error fetching rent pending tenants:", error);
@@ -81,111 +79,137 @@ const HomeScreen = () => {
         setLoading(false);
       }
     };
-  
+
     fetchRentPendingTenants();
   }, []);
-  
 
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [
-        societiesResponse,
-        flatsResponse,
-        flatsOnRentResponse,
-        emptyFlatsResponse,
-        rentReceivedResponse,
-        rentPendingResponse,
-      ] = await Promise.all([
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/societies/count"),
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/count"),
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/on-rent"), //occupied
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/vaccant"),  //empty
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-received"),
-        fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"),
-      ]);
+    const fetchData = async () => {
+      try {
+        const [
+          societiesResponse,
+          flatsResponse,
+          flatsOnRentResponse,
+          emptyFlatsResponse,
+          rentReceivedResponse,
+          rentPendingResponse,
+        ] = await Promise.all([
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/societies/count"
+          ),
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/flats/count"
+          ),
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/flats/on-rent"
+          ), //occupied
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"
+          ), //empty
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"
+          ),
+          fetch(
+            "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
+          ),
+        ]);
 
-      const societiesData = await societiesResponse.json();
-      const flatsData = await flatsResponse.json();
-      const flatsOnRentData = await flatsOnRentResponse.json();
+        const societiesData = await societiesResponse.json();
+        const flatsData = await flatsResponse.json();
+        const flatsOnRentData = await flatsOnRentResponse.json();
 
-      const emptyFlatsData = await emptyFlatsResponse.json();
-      const rentReceivedData = await rentReceivedResponse.json();
-      const rentPendingData = await rentPendingResponse.json();
+        const emptyFlatsData = await emptyFlatsResponse.json();
+        const rentReceivedData = await rentReceivedResponse.json();
+        const rentPendingData = await rentPendingResponse.json();
 
-      console.log({ societiesData, flatsData, flatsOnRentData, emptyFlatsData, rentReceivedData, rentPendingData });
+        console.log({
+          societiesData,
+          flatsData,
+          flatsOnRentData,
+          emptyFlatsData,
+          rentReceivedData,
+          rentPendingData,
+        });
 
-      const totalFlats = flatsData.totalFlats || 0;
-      const flatsOnRent = flatsOnRentData.noOfFlatsOnRent || 0;
-      const emptyFlats = emptyFlatsData.noOfVaccantFlats || 0;
-      const rentPending = rentPendingData.noOfFlatsRentPending || 0;
-      const rentReceived = rentReceivedData.noOfFlatsRentReceived || 0;
+        const totalFlats = flatsData.totalFlats || 0;
+        const flatsOnRent = flatsOnRentData.noOfFlatsOnRent || 0;
+        const emptyFlats = emptyFlatsData.noOfVaccantFlats || 0;
+        const rentPending = rentPendingData.noOfFlatsRentPending || 0;
+        const rentReceived = rentReceivedData.noOfFlatsRentReceived || 0;
 
-      setBlocks([
-        {
-          key: 1,
-          label: "Total Buildings",
-          value: societiesData.totalSocieties || 0,
-          maxValue: 100,
-          percent: 100,
-          style: styles.block1,
-          screen: "Totalbuildings",
-        },
-        {
-          key: 2,
-          label: "Total Flat",
-          value: totalFlats,
-          maxValue: 100,
-          percent: totalFlats > 0 ? 100 : 0,
-          style: styles.block2,
-          screen: "Room",
-        },
-        {
-          key: 3,
-          label: "Flat On Rent",
-          value: flatsOnRent,
-          maxValue: 100,
-          percent: totalFlats > 0 ? ((flatsOnRent / totalFlats) * 100).toFixed(1) : 0,   
-          style: styles.block3,
-          screen: "FlatsOnRent",
-        },
-        {
-          key: 4,
-          label: "Empty Flat",
-          value: emptyFlats,
-          maxValue: 100,
-          percent: totalFlats > 0 ? ((emptyFlats / totalFlats) * 100).toFixed(1) : 0,    
-          style: styles.block4,
-          screen: "Emptyflats",
-        },
-        {
-          key: 5,
-          label: "Pending Status",
-         value: rentPending,
-          maxValue: 100,
-          percent: flatsOnRent > 0 ? ((rentPending / flatsOnRent) * 100).toFixed(1) : 0, 
+        setBlocks([
+          {
+            key: 1,
+            label: "Total Buildings",
+            value: societiesData.totalSocieties || 0,
+            maxValue: 100,
+            percent: 100,
+            style: styles.block1,
+            screen: "Totalbuildings",
+          },
+          {
+            key: 2,
+            label: "Total Flat",
+            value: totalFlats,
+            maxValue: 100,
+            percent: totalFlats > 0 ? 100 : 0,
+            style: styles.block2,
+            screen: "Room",
+          },
+          {
+            key: 3,
+            label: "Flat On Rent",
+            value: flatsOnRent,
+            maxValue: 100,
+            percent:
+              totalFlats > 0
+                ? ((flatsOnRent / totalFlats) * 100).toFixed(1)
+                : 0,
+            style: styles.block3,
+            screen: "FlatsOnRent",
+          },
+          {
+            key: 4,
+            label: "Empty Flat",
+            value: emptyFlats,
+            maxValue: 100,
+            percent:
+              totalFlats > 0 ? ((emptyFlats / totalFlats) * 100).toFixed(1) : 0,
+            style: styles.block4,
+            screen: "Emptyflats",
+          },
+          {
+            key: 5,
+            label: "Pending Status",
+            value: rentPending,
+            maxValue: 100,
+            percent:
+              flatsOnRent > 0
+                ? ((rentPending / flatsOnRent) * 100).toFixed(1)
+                : 0,
 
-          style: styles.block5,
-          screen: "Pendingstatus",
-        },
-        {
-          key: 6,
-          label: "Month Rent Received",
-           value: rentReceived,
-          maxValue: 100,
-          percent: flatsOnRent > 0 ? ((rentReceived / flatsOnRent) * 100).toFixed(1) : 0,
-          style: styles.block6,
-          screen: "Recieverent",
-        },
-      ]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-  fetchData();
-}, []);
-
-
+            style: styles.block5,
+            screen: "Pendingstatus",
+          },
+          {
+            key: 6,
+            label: "Month Rent Received",
+            value: rentReceived,
+            maxValue: 100,
+            percent:
+              flatsOnRent > 0
+                ? ((rentReceived / flatsOnRent) * 100).toFixed(1)
+                : 0,
+            style: styles.block6,
+            screen: "Recieverent",
+          },
+        ]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const [blocks, setBlocks] = useState([]);
 
@@ -268,7 +292,6 @@ const HomeScreen = () => {
   };
 
   const renderItem = ({ item }) => (
-
     <View style={styles.tenantItem}>
       <Image
         source={
@@ -399,7 +422,7 @@ const HomeScreen = () => {
         </TouchableWithoutFeedback>
       )}
 
-<Animated.View style={[styles.bellSidebar, { right: bellSidebarAnim }]}>
+      <Animated.View style={[styles.bellSidebar, { right: bellSidebarAnim }]}>
         <View
           style={{
             alignItems: "center",
@@ -414,15 +437,13 @@ const HomeScreen = () => {
           </Text>
         </View>
         <View style={styles.container}>
-      <FlatList
-        data={rentPendingTenants}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
-    </View>
+          <FlatList
+            data={rentPendingTenants}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          />
+        </View>
       </Animated.View>
-
-
 
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.content}>

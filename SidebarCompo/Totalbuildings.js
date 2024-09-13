@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
+  Alert,
   Image,
   Modal,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const Totalbuildings = ({ navigation }) => {
@@ -21,7 +21,7 @@ const Totalbuildings = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      "https://stock-management-system-server-6mja.onrender.com/api/societies"
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
     )
       .then((response) => response.json())
       .then((data) => setBuildingsData(data))
@@ -42,7 +42,7 @@ const Totalbuildings = ({ navigation }) => {
     };
 
     fetch(
-      "https://stock-management-system-server-6mja.onrender.com/api/societies",
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies",
       {
         method: "POST",
         headers: {

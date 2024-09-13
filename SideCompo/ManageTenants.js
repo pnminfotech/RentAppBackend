@@ -36,7 +36,7 @@ const ManageTenants = ({ navigation }) => {
 
   const fetchSocieties = () => {
     fetch(
-      "https://stock-management-system-server-6mja.onrender.com/api/societies"
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
     )
       .then((response) => {
         if (!response.ok) {
@@ -58,7 +58,7 @@ const ManageTenants = ({ navigation }) => {
   const fetchTenantsForFlat = (flatId) => {
     if (tenantsByFlat[flatId]) return; // Prevent fetching if already loaded
     fetch(
-      `https://stock-management-system-server-6mja.onrender.com/api/tenants/tenants-by-flat/${flatId}`
+      `https://stock-management-system-server-tmxv.onrender.com/api/tenants/tenants-by-flat/${flatId}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -78,7 +78,7 @@ const ManageTenants = ({ navigation }) => {
     setLoadingWings(true);
     const fetchPromises = societies.map((society) =>
       fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${society._id}`
+        `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${society._id}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -89,7 +89,7 @@ const ManageTenants = ({ navigation }) => {
         .then((wings) => {
           const wingPromises = wings.map((wing) =>
             fetch(
-              `https://stock-management-system-server-6mja.onrender.com/api/flats/flats-by-wings/${wing._id}`
+              `https://stock-management-system-server-tmxv.onrender.com/api/flats/flats-by-wings/${wing._id}`
             )
               .then((response) => {
                 if (!response.ok) {
@@ -138,11 +138,11 @@ const ManageTenants = ({ navigation }) => {
 
     try {
       const response = await fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${selectedTenant._id}`,
+        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${selectedTenant._id}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             name: selectedTenant.name,
@@ -155,18 +155,18 @@ const ManageTenants = ({ navigation }) => {
       );
 
       if (!response.ok) {
-        throw new Error('Failed to update tenant details');
+        throw new Error("Failed to update tenant details");
       }
 
       const updatedTenant = await response.json();
-      console.log('Tenant updated successfully:', updatedTenant);
+      console.log("Tenant updated successfully:", updatedTenant);
 
       // Update the local state to reflect the changes
-      setTenantsByFlat(prevData =>
+      setTenantsByFlat((prevData) =>
         Object.fromEntries(
           Object.entries(prevData).map(([flatId, tenants]) => [
             flatId,
-            tenants.map(tenant =>
+            tenants.map((tenant) =>
               tenant._id === updatedTenant._id ? updatedTenant : tenant
             ),
           ])
@@ -175,32 +175,31 @@ const ManageTenants = ({ navigation }) => {
 
       setEditModalVisible(false);
     } catch (error) {
-      console.error('Error updating tenant:', error);
+      console.error("Error updating tenant:", error);
     }
   };
-
 
   const deleteTenant = async () => {
     if (!selectedTenant) return;
 
     try {
       const response = await fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${selectedTenant._id}`,
+        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${selectedTenant._id}`,
         {
-          method: 'DELETE',
+          method: "DELETE",
         }
       );
 
       if (!response.ok) {
-        throw new Error('Failed to delete tenant');
+        throw new Error("Failed to delete tenant");
       }
 
       // Update the local state to remove the deleted tenant
-      setTenantsByFlat(prevData =>
+      setTenantsByFlat((prevData) =>
         Object.fromEntries(
           Object.entries(prevData).map(([flatId, tenants]) => [
             flatId,
-            tenants.filter(tenant => tenant._id !== selectedTenant._id),
+            tenants.filter((tenant) => tenant._id !== selectedTenant._id),
           ])
         )
       );
@@ -208,11 +207,9 @@ const ManageTenants = ({ navigation }) => {
       setDeleteModalVisible(false);
       setSelectedTenant(null);
     } catch (error) {
-      console.error('Error deleting tenant:', error);
+      console.error("Error deleting tenant:", error);
     }
   };
-
-
 
   return (
     <View style={styles.container}>
@@ -273,8 +270,8 @@ const ManageTenants = ({ navigation }) => {
                                           <Image
                                             source={
                                               tenant.gender === "female"
-                                                ? require("../assets/images/female.png") 
-                                                : require("../assets/images/male.png")   
+                                                ? require("../assets/images/female.png")
+                                                : require("../assets/images/male.png")
                                             }
                                             style={styles.image}
                                           />
@@ -353,7 +350,7 @@ const ManageTenants = ({ navigation }) => {
                 setSelectedTenant({ ...selectedTenant, ph_no: text })
               }
             />
-             <TextInput
+            <TextInput
               style={styles.input}
               placeholder="rent status"
               value={selectedTenant?.rent_status}
@@ -379,7 +376,7 @@ const ManageTenants = ({ navigation }) => {
               <TouchableOpacity
                 style={[styles.button, styles.saveButton]}
                 onPress={() => {
-                  updateTenantDetails()
+                  updateTenantDetails();
                 }}
               >
                 <Text style={styles.buttonText}>Save</Text>
@@ -409,9 +406,7 @@ const ManageTenants = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button, styles.deleteButton]}
-                onPress={ () => 
-                  deleteTenant()
-                }
+                onPress={() => deleteTenant()}
               >
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>

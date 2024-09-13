@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
   Button,
+  Image,
+  Modal,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 
 const RentStatus = () => {
   const [tenants, setTenants] = useState([]);
@@ -21,7 +19,9 @@ const RentStatus = () => {
   const [successMessage, setSuccessMessage] = useState("");
 
   const fetchActiveTenants = () => {
-    fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants?tenant_status=Active&rentPaid=false")
+    fetch(
+      "https://stock-management-system-server-tmxv.onrender.com/api/tenants?tenant_status=Active&rentPaid=false"
+    )
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -38,20 +38,30 @@ const RentStatus = () => {
   };
 
   const updateRentPaidStatus = (tenantId, status) => {
-    fetch(`https://stock-management-system-server-6mja.onrender.com/api/tenants/${tenantId}/rent-paid`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ rentPaid: status }),
-    })
+    fetch(
+      `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${tenantId}/rent-paid`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ rentPaid: status }),
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
-        if (data.message === "Rent marked as paid" || data.message === "Rent status updated") {
+        if (
+          data.message === "Rent marked as paid" ||
+          data.message === "Rent status updated"
+        ) {
           setTenants((prevTenants) =>
             prevTenants.filter((tenant) => tenant._id !== tenantId)
           );
-          setSuccessMessage(`${selectedTenant.name} has had their rent marked as ${status ? 'paid' : 'unpaid'}.`);
+          setSuccessMessage(
+            `${selectedTenant.name} has had their rent marked as ${
+              status ? "paid" : "unpaid"
+            }.`
+          );
           setSuccessModalVisible(true);
         } else {
           console.error("Error updating rent status:", data);
@@ -73,7 +83,7 @@ const RentStatus = () => {
     setModalVisible(true);
   };
 
-   const handleConfirmAction = (response) => {
+  const handleConfirmAction = (response) => {
     setModalVisible(false);
     if (confirmAction === "status") {
       updateRentPaidStatus(selectedTenant._id, response === "paid");
@@ -91,12 +101,15 @@ const RentStatus = () => {
       {tenants.map((tenant) => (
         <View key={tenant._id} style={styles.tenantContainer}>
           <Image
-            source={tenant.gender === "female" ? require("../assets/images/female.png") : require("../assets/images/male.png")}
+            source={
+              tenant.gender === "female"
+                ? require("../assets/images/female.png")
+                : require("../assets/images/male.png")
+            }
             style={styles.tenantImage}
           />
           <Text style={styles.tenantName}>{tenant.name}</Text>
-          <View style={styles.iconsContainer}>
-          </View>
+          <View style={styles.iconsContainer}></View>
         </View>
       ))}
 
@@ -110,8 +123,14 @@ const RentStatus = () => {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{modalMessage}</Text>
             <View style={styles.modalButtons}>
-              <Button title="Paid" onPress={() => handleConfirmAction("paid")} />        
-              <Button title="Not Paid" onPress={() => handleConfirmAction("not paid")} />
+              <Button
+                title="Paid"
+                onPress={() => handleConfirmAction("paid")}
+              />
+              <Button
+                title="Not Paid"
+                onPress={() => handleConfirmAction("not paid")}
+              />
             </View>
           </View>
         </Modal>

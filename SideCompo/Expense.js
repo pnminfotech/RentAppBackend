@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  FlatList,
+  Image,
   StyleSheet,
   Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Image,
   TouchableOpacity,
+  View,
 } from "react-native";
 
 const FlatsList = () => {
@@ -20,8 +20,8 @@ const FlatsList = () => {
       try {
         const response = await fetch(
           selectedType === "All"
-            ? "https://stock-management-system-server-6mja.onrender.com/api/flats"
-            : `https://stock-management-system-server-6mja.onrender.com/api/flats/type/${selectedType}`
+            ? "https://stock-management-system-server-tmxv.onrender.com/api/flats"
+            : `https://stock-management-system-server-tmxv.onrender.com/api/flats/type/${selectedType}`
         );
 
         if (!response.ok) {

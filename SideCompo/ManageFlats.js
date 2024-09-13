@@ -35,7 +35,7 @@ const ManageFlats = ({ navigation }) => {
 
   const fetchSocieties = () => {
     fetch(
-      "https://stock-management-system-server-6mja.onrender.com/api/societies"
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
     )
       .then((response) => {
         if (!response.ok) {
@@ -58,7 +58,7 @@ const ManageFlats = ({ navigation }) => {
     setLoadingWings(true);
     const fetchPromises = societies.map((society) =>
       fetch(
-        `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${society._id}`
+        `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${society._id}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -69,7 +69,7 @@ const ManageFlats = ({ navigation }) => {
         .then((wings) => {
           const wingPromises = wings.map((wing) =>
             fetch(
-              `https://stock-management-system-server-6mja.onrender.com/api/flats/flats-by-wings/${wing._id}`
+              `https://stock-management-system-server-tmxv.onrender.com/api/flats/flats-by-wings/${wing._id}`
             )
               .then((response) => {
                 if (!response.ok) {
@@ -118,7 +118,7 @@ const ManageFlats = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-6mja.onrender.com/api/flats/add-flats-by-wing/${selectedWing}`,
+      `https://stock-management-system-server-tmxv.onrender.com/api/flats/add-flats-by-wing/${selectedWing}`,
       {
         method: "POST",
         headers: {
@@ -155,7 +155,7 @@ const ManageFlats = ({ navigation }) => {
             if (wing._id === selectedWing) {
               return {
                 ...wing,
-                flats: [...wing.flats, newFlat], // Add the new flat to the existing flats        
+                flats: [...wing.flats, newFlat], // Add the new flat to the existing flats
               };
             }
             return wing;
@@ -206,13 +206,17 @@ const ManageFlats = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-6mja.onrender.com/api/flats/${selectedFlat.flatId}`,
+      `https://stock-management-system-server-tmxv.onrender.com/api/flats/${selectedFlat.flatId}`,
       {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name: flatName, flat_type: flatType ,amount : amount}),
+        body: JSON.stringify({
+          name: flatName,
+          flat_type: flatType,
+          amount: amount,
+        }),
       }
     )
       .then((response) => {
@@ -280,7 +284,7 @@ const ManageFlats = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-6mja.onrender.com/api/flats/${selectedFlat.flatId}`,
+      `https://stock-management-system-server-tmxv.onrender.com/api/flats/${selectedFlat.flatId}`,
       {
         method: "DELETE",
       }
@@ -397,7 +401,9 @@ const ManageFlats = ({ navigation }) => {
                               style={styles.flatImage}
                             />
                             <Text style={styles.flatName}>{flat.name}</Text>
-                            <Text style={styles.flatName}>{flat.flat_type}</Text>
+                            <Text style={styles.flatName}>
+                              {flat.flat_type}
+                            </Text>
                             <View style={styles.flatIcons}>
                               <TouchableOpacity
                                 onPress={() => editFlat(flat._id, wing._id)}

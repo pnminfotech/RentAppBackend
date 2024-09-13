@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
+  ActivityIndicator,
   FlatList,
   Image,
   StyleSheet,
-  ActivityIndicator,
+  Text,
+  View,
 } from "react-native";
 
-// Import the local image
 import flatImage from "../assets/images/flats.jpg";
 
+// Import the local image
 const FlatsOnRentScreen = () => {
   const [flatsOnRent, setFlatsOnRent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const FlatsOnRentScreen = () => {
     const fetchAllottedFlats = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-6mja.onrender.com/api/flats/vaccant"
+          "https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"
         );
         const flatsData = await response.json();
         console.log("Fetched vacant flats:", flatsData); // Debug log
@@ -62,9 +62,7 @@ const FlatsOnRentScreen = () => {
             <Image source={flatImage} style={styles.flatImage} />
             <View style={styles.flatDetails}>
               <Text style={styles.flatName}>{item.name}</Text>
-              <Text style={styles.flatRentStatus}>
-                Vacant
-              </Text>
+              <Text style={styles.flatRentStatus}>Vacant</Text>
             </View>
           </View>
         )}

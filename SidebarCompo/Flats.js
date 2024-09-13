@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
+  Alert,
   Image,
   Modal,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 
-const API_URL = "https://stock-management-system-server-6mja.onrender.com";
+const API_URL = "https://stock-management-system-server-tmxv.onrender.com";
 
 const Flats = ({ route, navigation }) => {
   const { societyId } = route.params;
@@ -20,7 +20,7 @@ const Flats = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [flatName, setFlatName] = useState("");
   const [flatType, setFlatType] = useState("");
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState("");
 
   useEffect(() => {
     fetch(`${API_URL}/api/flats/flats-by-wings/${societyId}`)
@@ -42,7 +42,11 @@ const Flats = ({ route, navigation }) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ name: flatName, flat_type: flatType, amount:  amount }),
+          body: JSON.stringify({
+            name: flatName,
+            flat_type: flatType,
+            amount: amount,
+          }),
         }
       );
 
@@ -128,14 +132,14 @@ const Flats = ({ route, navigation }) => {
               value={flatType}
               placeholder={{ label: "Select Flat Type", value: null }}
             />
-             <TextInput
-          style={styles.input}
-          placeholder="Enter Amount"
-          value={amount}
-          onChangeText={(text) => setAmount(text)}
-          editable={true}
-          keyboardType="numeric"
-        />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Amount"
+              value={amount}
+              onChangeText={(text) => setAmount(text)}
+              editable={true}
+              keyboardType="numeric"
+            />
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.submitButton}
@@ -246,7 +250,7 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20,
     minHeight: 40,
-    marginTop:20,
+    marginTop: 20,
   },
   buttonContainer: {
     flexDirection: "row",

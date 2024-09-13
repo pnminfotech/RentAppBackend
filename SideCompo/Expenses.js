@@ -1,42 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import { Picker } from "@react-native-picker/picker";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
+  Modal,
+  ScrollView,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  Modal,
   TextInput,
-  Alert,
-} from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 const flatTypes = ["1R", "1RK", "1BHK", "2BHK", "3BHK"];
 
 const Expenses = () => {
-  const [selectedButton, setSelectedButton] = useState('Rent');
+  const [selectedButton, setSelectedButton] = useState("Rent");
   const [societies, setSocieties] = useState([]);
-  const [selectedSociety, setSelectedSociety] = useState('');
-  const [selectedFlatType, setSelectedFlatType] = useState('');
-  const [amount, setAmount] = useState('');
+  const [selectedSociety, setSelectedSociety] = useState("");
+  const [selectedFlatType, setSelectedFlatType] = useState("");
+  const [amount, setAmount] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [fetchedAmount, setFetchedAmount] = useState(null);
 
   useEffect(() => {
-    fetch('https://stock-management-system-server-6mja.onrender.com/api/societies')
-      .then(response => response.json())
-      .then(data => {
+    fetch(
+      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+    )
+      .then((response) => response.json())
+      .then((data) => {
         setSocieties(data);
       })
-      .catch(error => {
-        console.error('Error fetching societies:', error);
+      .catch((error) => {
+        console.error("Error fetching societies:", error);
       });
   }, []);
 
   const handleButtonClick = (button) => {
     setSelectedButton(button);
-    setSelectedSociety('');
-    setSelectedFlatType('');
+    setSelectedSociety("");
+    setSelectedFlatType("");
     setFetchedAmount(null);
   };
 
@@ -52,15 +54,17 @@ const Expenses = () => {
     let url;
     let payload;
 
-    if (selectedButton === 'Rent') {
-      url = 'https://stock-management-system-server-6mja.onrender.com/api/payments/rent';
+    if (selectedButton === "Rent") {
+      url =
+        "https://stock-management-system-server-tmxv.onrender.com/api/payments/rent";
       payload = {
         society: selectedSociety,
         flatType: selectedFlatType,
         ramount: amount,
       };
-    } else if (selectedButton === 'Maintenance') {
-      url = 'https://stock-management-system-server-6mja.onrender.com/api/payments/maintenance';
+    } else if (selectedButton === "Maintenance") {
+      url =
+        "https://stock-management-system-server-tmxv.onrender.com/api/payments/maintenance";
       payload = {
         society: selectedSociety,
         flatType: selectedFlatType,
@@ -68,45 +72,53 @@ const Expenses = () => {
       };
     }
 
-    console.log('Payload:', payload);
+    console.log("Payload:", payload);
 
     fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         console.log(`${selectedButton} updated:`, data);
         Alert.alert(`${selectedButton} amount updated successfully.`);
         setIsModalVisible(false);
-        setAmount('');
+        setAmount("");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(`Error updating ${selectedButton}:`, error);
-        Alert.alert(`Error updating ${selectedButton} amount. Please try again.`);
+        Alert.alert(
+          `Error updating ${selectedButton} amount. Please try again.`
+        );
       });
   };
 
   const handleViewAmount = () => {
     if (!selectedSociety || !selectedFlatType) {
-      Alert.alert("Please select both society and flat type before viewing the amount.");
+      Alert.alert(
+        "Please select both society and flat type before viewing the amount."
+      );
       return;
     }
 
-    const endpoint = selectedButton === 'Rent' ? 'rent' : 'maintenance';
+    const endpoint = selectedButton === "Rent" ? "rent" : "maintenance";
 
-    fetch(`https://stock-management-system-server-6mja.onrender.com/api/payments/${endpoint}/${selectedSociety}/${selectedFlatType}`)
-      .then(response => response.json())
-      .then(data => {
+    fetch(
+      `https://stock-management-system-server-tmxv.onrender.com/api/payments/${endpoint}/${selectedSociety}/${selectedFlatType}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
         console.log(`${selectedButton} details:`, data);
         setFetchedAmount(data.amount || "No amount found");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(`Error fetching ${selectedButton} details:`, error);
-        Alert.alert(`Error fetching ${selectedButton} details. Please try again.`);
+        Alert.alert(
+          `Error fetching ${selectedButton} details. Please try again.`
+        );
       });
   };
 
@@ -117,18 +129,18 @@ const Expenses = () => {
         <TouchableOpacity
           style={[
             styles.button,
-            selectedButton === 'Rent' && styles.selectedButton,
+            selectedButton === "Rent" && styles.selectedButton,
           ]}
-          onPress={() => handleButtonClick('Rent')}
+          onPress={() => handleButtonClick("Rent")}
         >
           <Text style={styles.buttonText}>Rent</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.button,
-            selectedButton === 'Maintenance' && styles.selectedButton,
+            selectedButton === "Maintenance" && styles.selectedButton,
           ]}
-          onPress={() => handleButtonClick('Maintenance')}
+          onPress={() => handleButtonClick("Maintenance")}
         >
           <Text style={styles.buttonText}>Maintenance</Text>
         </TouchableOpacity>
@@ -143,7 +155,7 @@ const Expenses = () => {
               style={styles.picker}
             >
               <Picker.Item label="Select a society" value="" />
-              {societies.map(society => (
+              {societies.map((society) => (
                 <Picker.Item
                   key={society._id}
                   label={society.name}
@@ -160,7 +172,7 @@ const Expenses = () => {
               style={styles.picker}
             >
               <Picker.Item label="Select a flat type" value="" />
-              {flatTypes.map(type => (
+              {flatTypes.map((type) => (
                 <Picker.Item key={type} label={type} value={type} />
               ))}
             </Picker>
@@ -169,7 +181,9 @@ const Expenses = () => {
             style={styles.updateButton}
             onPress={handleOpenModal}
           >
-            <Text style={styles.buttonText}>Update {selectedButton} Amount</Text>
+            <Text style={styles.buttonText}>
+              Update {selectedButton} Amount
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.updateButton}
@@ -227,34 +241,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   button: {
     flex: 1,
     padding: 6,
     marginHorizontal: 5,
-    backgroundColor: '#6699CC',
-    alignItems: 'center',
+    backgroundColor: "#6699CC",
+    alignItems: "center",
     borderRadius: 5,
   },
   selectedButton: {
-    backgroundColor: '#4477AA',
+    backgroundColor: "#4477AA",
   },
   buttonText: {
     marginTop: 5,
     marginBottom: 5,
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   dropdownContainer: {
@@ -265,66 +279,65 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 5,
   },
   updateButton: {
     padding: 10,
-    backgroundColor: '#6699CC',
-    alignItems: 'center',
+    backgroundColor: "#6699CC",
+    alignItems: "center",
     borderRadius: 5,
     marginTop: 20,
   },
   amountText: {
     marginTop: 10,
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
     width: 300,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
+    width: "100%",
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 5,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   modalButton: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#6699CC',
-    alignItems: 'center',
+    backgroundColor: "#6699CC",
+    alignItems: "center",
     borderRadius: 5,
     marginHorizontal: 5,
   },
   cancelButton: {
-    backgroundColor: '#FF6347',
+    backgroundColor: "#FF6347",
   },
 });
 
 export default Expenses;
-
