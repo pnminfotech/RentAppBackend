@@ -12,7 +12,7 @@ exports.getAllFlats = async (req, res) => {
 exports.getCountFlats = async (req, res) => {
   try {
     const flats = await Flats.find();
-    res.json(flats.length );
+    res.json({flats: flats.length });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
