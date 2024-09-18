@@ -22,7 +22,7 @@ exports.getCountFlats = async (req, res) => {
 exports.getRentedFlats = async (req, res) => {
   try {
     const flatsOnRent = await Flats.find({ flat_status: "allotted" });
-    res.json({flatsOnRent : flatsOnRent.length});
+    res.json(flatsOnRent.length);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
