@@ -15,7 +15,7 @@ exports.getAllTenants = async (req, res) => {
 exports.getAllRentReceivedTenants = async (req, res) => {
   try {
     const tenantRentReceived = await Tenant.find({ rent_status: "paid" });
-    res.json({ tenantRentReceived });
+    res.json(tenantRentReceived.length);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -25,7 +25,7 @@ exports.getAllRentReceivedTenants = async (req, res) => {
 exports.getAllRentPendingTenants = async (req, res) => {
   try {
     const tenantRentPending = await Tenant.find({ rent_status: "pending" });
-    res.json(tenantRentPending);
+    res.json( tenantRentPending.length);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server Error" });
@@ -286,7 +286,7 @@ exports.deactivateTenant = async (req, res) => {
     const tenant = await Tenant.findById(req.params.id);
 
     if (tenant) {
-      tenant.active = false; // Assuming active field is used to track tenant status
+      tenant.active = false; // Assuming `active` field is used to track tenant status
       const updatedTenant = await tenant.save();
       res.json({ message: "Tenant deactivated", tenant: updatedTenant });
     } else {
@@ -302,7 +302,7 @@ exports.activateTenant = async (req, res) => {
     const tenant = await Tenant.findById(req.params.id);
 
     if (tenant) {
-      tenant.active = true; // Assuming active field is used to track tenant status
+      tenant.active = true; // Assuming `active` field is used to track tenant status
       const updatedTenant = await tenant.save();
       res.json({ message: "Tenant activated", tenant: updatedTenant });
     } else {
@@ -318,7 +318,7 @@ exports.markRentAsPaid = async (req, res) => {
     const tenant = await Tenant.findById(req.params.id);
 
     if (tenant) {
-      tenant.rentPaid = true; // Assuming rentPaid field is used to track rent payment status
+      tenant.rentPaid = true; // Assuming `rentPaid` field is used to track rent payment status
       const updatedTenant = await tenant.save();
       res.json({ message: "Rent marked as paid", tenant: updatedTenant });
     } else {
