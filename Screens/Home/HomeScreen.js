@@ -93,35 +93,25 @@ const HomeScreen = () => {
           emptyFlatsResponse,
           rentReceivedResponse,
           rentPendingResponse,
+          tenantsResponse,
         ] = await Promise.all([
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/societies/count"
-          ),
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/flats/count"
-          ),
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/flats/on-rent"
-          ), //occupied
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"
-          ), //empty
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"
-          ),
-          fetch(
-            "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
-          ),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/societies/count"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/count"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/on-rent"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"),
+          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants")
         ]);
-
+  
         const societiesData = await societiesResponse.json();
         const flatsData = await flatsResponse.json();
         const flatsOnRentData = await flatsOnRentResponse.json();
-
         const emptyFlatsData = await emptyFlatsResponse.json();
         const rentReceivedData = await rentReceivedResponse.json();
         const rentPendingData = await rentPendingResponse.json();
-
+        const tenantsData = await tenantsResponse.json();
+  
         console.log({
           societiesData,
           flatsData,
@@ -130,13 +120,21 @@ const HomeScreen = () => {
           rentReceivedData,
           rentPendingData,
         });
-
-        const totalFlats = flatsData.totalFlats || 0;
-        const flatsOnRent = flatsOnRentData.noOfFlatsOnRent || 0;
-        const emptyFlats = emptyFlatsData.noOfVaccantFlats || 0;
-        const rentPending = rentPendingData.noOfFlatsRentPending || 0;
-        const rentReceived = rentReceivedData.noOfFlatsRentReceived || 0;
-
+  
+        const totalFlats = flatsData.totalFlats || 0; // Ensure this matches the correct property
+        const flatsOnRent = flatsOnRentData.length || 0; // Fetch the length of flats on rent
+        const emptyFlats = emptyFlatsData.length || 0; // Fetch the length of vacant flats
+  
+        const rentPending = rentPendingData.length || 0;  // Count pending rents
+        const rentReceived = rentReceivedData.length || 0; // Count received rents
+        const totalTenants = tenantsData.length || 0;
+  
+        console.log('Total Flats:', totalFlats);
+        console.log('Flats On Rent:', flatsOnRent);
+        console.log('Empty Flats:', emptyFlats);
+        console.log('Rent Pending:', rentPending);
+        console.log('Rent Received:', rentReceived);
+  
         setBlocks([
           {
             key: 1,
@@ -149,8 +147,8 @@ const HomeScreen = () => {
           },
           {
             key: 2,
-            label: "Total Flat",
-            value: totalFlats,
+            label: "Total Flats",
+            value: totalFlats,  // Displays total flats (e.g., 17)
             maxValue: 100,
             percent: totalFlats > 0 ? 100 : 0,
             style: styles.block2,
@@ -158,23 +156,19 @@ const HomeScreen = () => {
           },
           {
             key: 3,
-            label: "Flat On Rent",
-            value: flatsOnRent,
+            label: "Flats On Rent",
+            value: flatsOnRent,  // Fetches the length
             maxValue: 100,
-            percent:
-              totalFlats > 0
-                ? ((flatsOnRent / totalFlats) * 100).toFixed(1)
-                : 0,
+            percent: totalFlats > 0 ? ((flatsOnRent / totalFlats) * 100).toFixed(1) : 0,
             style: styles.block3,
             screen: "FlatsOnRent",
           },
           {
             key: 4,
-            label: "Empty Flat",
-            value: emptyFlats,
+            label: "Empty Flats",
+            value: emptyFlats, // Fetches the length
             maxValue: 100,
-            percent:
-              totalFlats > 0 ? ((emptyFlats / totalFlats) * 100).toFixed(1) : 0,
+            percent: totalFlats > 0 ? ((emptyFlats / totalFlats) * 100).toFixed(1) : 0,
             style: styles.block4,
             screen: "Emptyflats",
           },
@@ -182,24 +176,17 @@ const HomeScreen = () => {
             key: 5,
             label: "Pending Status",
             value: rentPending,
-            maxValue: 100,
-            percent:
-              flatsOnRent > 0
-                ? ((rentPending / flatsOnRent) * 100).toFixed(1)
-                : 0,
-
+            maxValue:  totalTenants || 100,
+            percent: totalTenants > 0 ? ((rentPending / totalTenants) * 100).toFixed(1) : 0,
             style: styles.block5,
             screen: "Pendingstatus",
           },
           {
             key: 6,
             label: "Month Rent Received",
-            value: rentReceived,
+            value: rentReceived, // Displays as a number
             maxValue: 100,
-            percent:
-              flatsOnRent > 0
-                ? ((rentReceived / flatsOnRent) * 100).toFixed(1)
-                : 0,
+            percent: totalTenants > 0 ? ((rentReceived / totalTenants) * 100).toFixed(1) : 0,
             style: styles.block6,
             screen: "Recieverent",
           },
@@ -208,9 +195,10 @@ const HomeScreen = () => {
         console.error("Error fetching data:", error);
       }
     };
+  
     fetchData();
   }, []);
-
+  
   const [blocks, setBlocks] = useState([]);
 
   const handleBlockPressIn = (blockNumber) => {

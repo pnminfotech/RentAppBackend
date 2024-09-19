@@ -65,13 +65,14 @@ export default function Userdetails({ route }) {
     const currentDate = selectedDate || date;
     setShow(false); // Keep the picker open on iOS if desired
     setDate(currentDate);
-
+  
     // Update userDetails state with selected date
     setUserDetails((prevState) => ({
       ...prevState,
-      rent_form_date: currentDate.toISOString().split(" ")[0], // Format date as YYYY-MM-DD
+      rent_form_date: currentDate.toISOString().split("T")[0], // Format date as YYYY-MM-DD
     }));
   };
+  
 
   const showMode = () => {
     setShow(true);
@@ -798,7 +799,7 @@ export default function Userdetails({ route }) {
                 />
               )}
             </View>
-            <Text>Selected Date: {userDetails.rent_form_date}</Text>
+            <Text style={styles.dateSel}>Selected Date: {userDetails.rent_form_date}</Text>
 
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Permanant Address:</Text>
@@ -1301,6 +1302,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
+    marginBottom:10,
   },
   datePickerButton: {
     backgroundColor: "#007bff",
@@ -1317,5 +1319,7 @@ const styles = StyleSheet.create({
   },
   pendingStatus: {
     color: "red",
-  },
+  },dateSel:{
+    marginBottom:10,
+  }
 });

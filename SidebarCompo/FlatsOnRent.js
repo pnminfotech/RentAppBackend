@@ -8,9 +8,6 @@ import {
   View,
 } from "react-native";
 
-import flatImage from "../assets/images/flats.jpg";
-
-// Import the local image
 const FlatsOnRentScreen = () => {
   const [flatsOnRent, setFlatsOnRent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +19,7 @@ const FlatsOnRentScreen = () => {
           "https://stock-management-system-server-tmxv.onrender.com/api/flats/allotted"
         );
         const flatsData = await response.json();
-        console.log("Fetched allotted flats:", flatsData); // Debug log
+        console.log("Fetched allotted flats:", flatsData);
         setFlatsOnRent(flatsData);
         setLoading(false);
       } catch (error) {
@@ -57,10 +54,14 @@ const FlatsOnRentScreen = () => {
         keyExtractor={(item) => item._id.toString()} // Adjust key as per your flat schema
         renderItem={({ item }) => (
           <View style={styles.flatItem}>
-            <Image source={flatImage} style={styles.flatImage} />
+            <Image 
+              source={item.image ? { uri: item.image } : require('../assets/images/flats.jpg')} 
+              style={styles.flatImage} 
+            />
             <View style={styles.flatDetails}>
               <Text style={styles.flatName}>{item.name}</Text>
               <Text style={styles.flatRentStatus}>{item.flat_status}</Text>
+              <Text style={styles.flatRentAmount}>Rent: ${item.rent_amount}</Text>
             </View>
           </View>
         )}
@@ -108,6 +109,10 @@ const styles = StyleSheet.create({
   flatRentStatus: {
     fontSize: 14,
     color: "green",
+  },
+  flatRentAmount: {
+    fontSize: 14,
+    color: "black",
   },
 });
 

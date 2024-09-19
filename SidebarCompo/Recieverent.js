@@ -24,22 +24,21 @@ const Recieverent = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        const updatedTenants = await Promise.all(
+          data.map(async (tenant) => {
+            const currentDate = moment();
+            const rentFromDate = moment(tenant.rent_form_date);
+            const daysDiff = currentDate.diff(rentFromDate, "days");
 
-        const updatedTenants = data.tenantRentReceived.map((tenant) => {
-          const currentDate = moment();
-          const rentFromDate = moment(tenant.rent_form_date);
-          const daysDiff = currentDate.diff(rentFromDate, "days");
-          console.log(`Days Difference: ${daysDiff}`);
-
-          if (daysDiff > 30) {
-            tenant.rent_status = "pending";
-            // console.log(`Rent status for ${tenant.name} set to pending.`);
-            updateTenantStatus(tenant);
-          } else {
-            tenant.rent_status = "paid";
-          }
-          return tenant;
-        });
+            if (daysDiff > 30) {
+              tenant.rent_status = "pending";
+              await updateTenantStatus(tenant);
+            } else {
+              tenant.rent_status = "paid";
+            }
+            return tenant;
+          })
+        );
 
         setRentPaidTenants(updatedTenants);
       } catch (error) {
@@ -57,7 +56,7 @@ const Recieverent = () => {
       const response = await fetch(
         `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${tenant._id}`,
         {
-          method: "PUT", // or "PATCH"
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },

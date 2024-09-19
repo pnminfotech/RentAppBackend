@@ -8,38 +8,53 @@ import {
   View,
 } from "react-native";
 
-import flatImage from "../assets/images/flats.jpg";
+import flatImage from "../assets/images/flats.jpg"; // Local image import
 
-// Import the local image
 const FlatsOnRentScreen = () => {
   const [flatsOnRent, setFlatsOnRent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchAllottedFlats = async () => {
+    const fetchVacantFlats = async () => {
       try {
         const response = await fetch(
           "https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"
         );
+        
+        // Check if the response is ok
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
         const flatsData = await response.json();
         console.log("Fetched vacant flats:", flatsData); // Debug log
 
-        // If the backend returns an object with a key, adjust here.
-        setFlatsOnRent(flatsData.vaccantFlats || flatsData);
+        // Update state with the vacant flats
+        setFlatsOnRent(flatsData.vaccantFlats || flatsData); // Ensure correct data structure
         setLoading(false);
       } catch (error) {
         console.error("Error fetching vacant flats:", error);
+        setError("Failed to load flats. Please try again later.");
         setLoading(false);
       }
     };
 
-    fetchAllottedFlats();
+    fetchVacantFlats();
   }, []);
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>{error}</Text>
       </View>
     );
   }
