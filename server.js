@@ -6,6 +6,8 @@ const routes = require("./routes");
 const fs = require("fs");
 const path = require("path");
 const User = require("./models/User");
+const passwordRoutes = require("./checkPassWord")
+const userRoutes = require("./userRoutes"); 
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,6 +16,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+app.use("/api/password", passwordRoutes);
+app.use("/api/users", userRoutes);
 
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) {
