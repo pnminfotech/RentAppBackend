@@ -85,7 +85,7 @@ exports.createFlatByWingId = async (req, res) => {
     wing_id: req.params.id,
     flat_type: req.body.flat_type,
     flat_status: "vaccant",
-    rent_amount: req.body.rent_amount,
+    rent_Amount: req.body.rent_Amount, 
   });
   try {
     const isexists = await Flats.findOne({
