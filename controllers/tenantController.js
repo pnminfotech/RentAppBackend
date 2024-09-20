@@ -171,6 +171,11 @@ exports.createTenant = async (req, res) => {
 
     // Save the tenant
     const newTenant = await tenant.save();
+    const updatedFlat = await Flats.findByIdAndUpdate(
+      id,
+      { flat_status: "allotted" },
+      { new: true }
+    );
 
     // Send a success message back to the front-end
     return res.status(201).json({
