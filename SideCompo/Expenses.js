@@ -24,7 +24,7 @@ const Expenses = () => {
 
   useEffect(() => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -56,7 +56,7 @@ const Expenses = () => {
 
     if (selectedButton === "Rent") {
       url =
-        "https://stock-management-system-server-tmxv.onrender.com/api/payments/rent";
+        "https://stock-management-system-server-6mja.onrender.com/api/payments/rent";
       payload = {
         society: selectedSociety,
         flatType: selectedFlatType,
@@ -64,7 +64,7 @@ const Expenses = () => {
       };
     } else if (selectedButton === "Maintenance") {
       url =
-        "https://stock-management-system-server-tmxv.onrender.com/api/payments/maintenance";
+        "https://stock-management-system-server-6mja.onrender.com/api/payments/maintenance";
       payload = {
         society: selectedSociety,
         flatType: selectedFlatType,
@@ -107,7 +107,7 @@ const Expenses = () => {
     const endpoint = selectedButton === "Rent" ? "rent" : "maintenance";
 
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/payments/${endpoint}/${selectedSociety}/${selectedFlatType}`
+      `https://stock-management-system-server-6mja.onrender.com/api/payments/${endpoint}/${selectedSociety}/${selectedFlatType}`
     )
       .then((response) => response.json())
       .then((data) => {

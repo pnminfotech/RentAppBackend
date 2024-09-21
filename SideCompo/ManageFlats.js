@@ -112,7 +112,7 @@ const ManageFlats = ({ navigation }) => {
   };
 
   const saveFlat = () => {
-    if (!selectedWing || !flatName || !flatType || !amount) {
+    if ( !flatName ) {
       console.error("Invalid wing ID or flat name");
       return;
     }
@@ -395,7 +395,7 @@ const ManageFlats = ({ navigation }) => {
                     {wing.flats && wing.flats.length > 0 ? (
                       <View style={styles.flatsContainer}>
                         {wing.flats.map((flat) => (
-                          <View key={flat._id} style={styles.flatContainer}>
+                          <View key={flat._id} flat={flat} style={styles.flatContainer}>
                             <Image
                               source={require("../assets/images/flats.jpg")}
                               style={styles.flatImage}
@@ -404,6 +404,8 @@ const ManageFlats = ({ navigation }) => {
                             <Text style={styles.flatName}>
                               {flat.flat_type}
                             </Text>
+                            
+                            
                             <View style={styles.flatIcons}>
                               <TouchableOpacity
                                 onPress={() => editFlat(flat._id, wing._id)}
@@ -453,6 +455,14 @@ const ManageFlats = ({ navigation }) => {
               value={flatType}
               onChangeText={setFlatType}
               placeholder="Enter Flat Type"
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Amount"
+              value={amount}
+              onChangeText={(text) => setAmount(text)}
+              editable={true}
+              keyboardType="numeric"
             />
             <View style={styles.modalButtons}>
               <TouchableOpacity

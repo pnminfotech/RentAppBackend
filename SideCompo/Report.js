@@ -47,7 +47,7 @@ const Report = ({ navigation }) => {
 
   const fetchSocieties = () => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => {
         if (!response.ok) {
@@ -70,7 +70,7 @@ const Report = ({ navigation }) => {
     setLoadingWings(true);
     const fetchPromises = societies.map((society) =>
       fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${society._id}`
+        `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${society._id}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -81,7 +81,7 @@ const Report = ({ navigation }) => {
         .then((wings) => {
           const wingPromises = wings.map((wing) =>
             fetch(
-              `https://stock-management-system-server-tmxv.onrender.com/api/flats/flats-by-wings/${wing._id}`
+              `https://stock-management-system-server-6mja.onrender.com/api/flats/flats-by-wings/${wing._id}`
             )
               .then((response) => {
                 if (!response.ok) {
@@ -118,7 +118,7 @@ const Report = ({ navigation }) => {
   const fetchTenantsForFlat = (flat_id) => {
     setLoadingTenants(true); // Start loading
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/tenants/tenants-by-flat/${flat_id}`
+      `https://stock-management-system-server-6mja.onrender.com/api/tenants/tenants-by-flat/${flat_id}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -169,7 +169,7 @@ const Report = ({ navigation }) => {
     }
 
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/flats",
+      "https://stock-management-system-server-6mja.onrender.com/api/flats",
       {
         method: "POST",
         headers: {
@@ -236,7 +236,7 @@ const Report = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/flats/${selectedFlat.flat_id}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/flats/${selectedFlat.flat_id}`,
       {
         method: "DELETE",
       }
@@ -303,7 +303,7 @@ const Report = ({ navigation }) => {
   };
 
   const handleFlatPress = (flat) => {
-    setSelectedFlat(selectedFlat && selectedFlat.id === flat.id ? null : flat);
+    navigation.navigate("UserDetails", { flatId: flat._id });
   };
   // const viewTenants = (flat_id) => {
   //   navigation.navigate("Userdetails", { flat_id });
@@ -350,84 +350,77 @@ const Report = ({ navigation }) => {
         <Text style={styles.errorText}>Error fetching data: {fetchError}</Text>
       )}
 
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        {societies.map((society) => (
-          <View key={society._id} style={styles.societyContainer}>
-            <TouchableOpacity
-              onPress={() => toggleSocietyExpansion(society._id)}
-            >
-              <View style={styles.societyHeader}>
-                <Image
-                  source={require("../assets/images/building.png")}
-                  style={styles.buildingImage}
-                />
-                <Text style={styles.societyName}>{society.name}</Text>
-              </View>
-            </TouchableOpacity>
-            <View style={styles.divider} />
-            {expandedSociety === society._id && wingsBySociety[society._id] && (
-              <View>
-                {wingsBySociety[society._id].map((wing) => (
-                  <View key={wing._id} style={styles.wingflatcontainer}>
-                    <TouchableOpacity
-                      onPress={() => toggleWingExpansion(wing._id)}
-                    >
-                      <View style={styles.wingImageNameContainer}>
-                        <View style={styles.wingContainer}>
+<ScrollView contentContainerStyle={styles.scrollView}>
+  {societies.map((society) => (
+    <View key={society._id} style={styles.societyContainer}>
+      {/* Society Header */}
+      <TouchableOpacity onPress={() => toggleSocietyExpansion(society._id)}>
+        <View style={styles.societyHeader}>
+          <Image
+            source={require("../assets/images/building.png")}
+            style={styles.buildingImage}
+          />
+          <Text style={styles.societyName}>{society.name}</Text>
+        </View>
+      </TouchableOpacity>
+
+      {expandedSociety === society._id && wingsBySociety[society._id] && (
+        <View>
+          {/* Wing Section */}
+          {wingsBySociety[society._id].map((wing) => (
+            <View key={wing._id} style={styles.wingflatcontainer}>
+              <TouchableOpacity onPress={() => toggleWingExpansion(wing._id)}>
+                <View style={styles.wingContainer}>
+                  <Image
+                    source={require("../assets/images/wing.png")}
+                    style={styles.wingImage}
+                  />
+                  <Text style={styles.wingName}>{wing.name}</Text>
+                </View>
+              </TouchableOpacity>
+
+              {expandedWing === wing._id && (
+                <View style={styles.flatListingContainer}>
+                  {/* Flat Section */}
+                  {wing.flats && wing.flats.length > 0 ? (
+                    wing.flats.map((flat) => (
+                      <View key={flat._id} style={styles.flatContainer}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            toggleFlatExpansion(flat._id);
+                            fetchTenantsForFlat(flat._id);
+                          }}
+                          style={styles.flatContent}
+                        >
                           <Image
-                            source={require("../assets/images/wing.png")}
-                            style={styles.wingImage}
+                            source={require("../assets/images/flats.jpg")}
+                            style={styles.flatImage}
                           />
-                          <Text style={styles.wingName}>{wing.name}</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                    <View style={styles.divider} />
-                    {expandedWing === wing._id && (
-                      <View style={styles.flatListingContainer}>
-                        {wing.flats && wing.flats.length > 0 ? (
-                          <FlatList
-                            data={wing.flats}
-                            keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => (
-                              <View key={item._id} style={styles.flatContainer}>
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    toggleFlatExpansion(item._id);
-                                    fetchTenantsForFlat(item._id);
-                                  }}
-                                  style={styles.flatContent}
-                                >
-                                  <Image
-                                    source={require("../assets/images/flats.jpg")}
-                                    style={styles.flatImage}
-                                  />
-                                  <View style={styles.flatDetails}>
-                                    <Text style={styles.flatName}>
-                                      {item.name} {item.flat_type}
-                                    </Text>
-                                  </View>
-                                </TouchableOpacity>
-                                {expandedFlat === item._id && (
-                                  <View style={styles.tenantBox}>
-                                    {renderTenants(item._id)}
-                                  </View>
-                                )}
-                              </View>
-                            )}
-                          />
-                        ) : (
-                          <Text>No flats available</Text>
+                          <Text style={styles.flatName}>
+                            {flat.name} {flat.flat_type}
+                          </Text>
+                        </TouchableOpacity>
+
+                        {expandedFlat === flat._id && (
+                          <View style={styles.tenantBox}>
+                            {renderTenants(flat._id)}
+                          </View>
                         )}
                       </View>
-                    )}
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
-        ))}
-      </ScrollView>
+                    ))
+                  ) : (
+                    <Text>No flats available</Text>
+                  )}
+                </View>
+              )}
+            </View>
+          ))}
+        </View>
+      )}
+    </View>
+  ))}
+</ScrollView>
+
     </View>
   );
 };

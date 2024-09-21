@@ -28,7 +28,7 @@ const Tenant = () => {
     const fetchTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/tenants"
+          "https://stock-management-system-server-6mja.onrender.com/api/tenants"
         );
         const result = await response.json();
         if (response.ok) {
@@ -159,7 +159,7 @@ const Tenant = () => {
               <td>Tanant Photo</td>
               <td>
               
-              <img src="https://stock-management-system-server-tmxv.onrender.com/${tenant.tenant_photo.replace(
+              <img src="https://stock-management-system-server-6mja.onrender.com/${tenant.tenant_photo.replace(
                 /\\/g,
                 "/"
               )}"></img>
@@ -170,7 +170,7 @@ const Tenant = () => {
               <td>Adhar Front</td>
               <td>
               
-              <img src="https://stock-management-system-server-tmxv.onrender.com/${tenant.adhar_front.replace(
+              <img src="https://stock-management-system-server-6mja.onrender.com/${tenant.adhar_front.replace(
                 /\\/g,
                 "/"
               )}"></img>
@@ -181,7 +181,7 @@ const Tenant = () => {
               <td>Adhar Back</td>
               <td>
               
-              <img src="https://stock-management-system-server-tmxv.onrender.com/${tenant.adhar_back.replace(
+              <img src="https://stock-management-system-server-6mja.onrender.com/${tenant.adhar_back.replace(
                 /\\/g,
                 "/"
               )}"></img>
@@ -192,7 +192,7 @@ const Tenant = () => {
               <td>Pan Photo</td>
               <td>
               
-              <img src="https://stock-management-system-server-tmxv.onrender.com/${tenant.pan_photo.replace(
+              <img src="https://stock-management-system-server-6mja.onrender.com/${tenant.pan_photo.replace(
                 /\\/g,
                 "/"
               )}"></img>
@@ -203,7 +203,7 @@ const Tenant = () => {
               <td>Electricity Bill</td>
               <td>
               
-              <img src="https://stock-management-system-server-tmxv.onrender.com/${tenant.electricity_bill.replace(
+              <img src="https://stock-management-system-server-6mja.onrender.com/${tenant.electricity_bill.replace(
                 /\\/g,
                 "/"
               )}"></img>

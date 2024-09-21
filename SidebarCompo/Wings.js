@@ -21,7 +21,7 @@ const Wings = ({ route, navigation }) => {
 
   useEffect(() => {
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${societyId}`
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${societyId}`
     )
       .then((response) => response.json())
       .then((data) => setWingData(data))
@@ -34,7 +34,7 @@ const Wings = ({ route, navigation }) => {
     };
 
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/add-wing-by-society/${societyId}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/add-wing-by-society/${societyId}`,
       {
         method: "POST",
         headers: {

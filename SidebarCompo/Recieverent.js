@@ -18,7 +18,7 @@ const Recieverent = () => {
     const fetchRentPaidTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"
+          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-received"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -54,7 +54,7 @@ const Recieverent = () => {
   const updateTenantStatus = async (tenant) => {
     try {
       const response = await fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${tenant._id}`,
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${tenant._id}`,
         {
           method: "PUT",
           headers: {

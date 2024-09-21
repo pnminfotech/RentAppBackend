@@ -36,7 +36,7 @@ const ManageTenants = ({ navigation }) => {
 
   const fetchSocieties = () => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => {
         if (!response.ok) {
@@ -58,7 +58,7 @@ const ManageTenants = ({ navigation }) => {
   const fetchTenantsForFlat = (flatId) => {
     if (tenantsByFlat[flatId]) return; // Prevent fetching if already loaded
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/tenants/tenants-by-flat/${flatId}`
+      `https://stock-management-system-server-6mja.onrender.com/api/tenants/tenants-by-flat/${flatId}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -78,7 +78,7 @@ const ManageTenants = ({ navigation }) => {
     setLoadingWings(true);
     const fetchPromises = societies.map((society) =>
       fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${society._id}`
+        `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${society._id}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -89,7 +89,7 @@ const ManageTenants = ({ navigation }) => {
         .then((wings) => {
           const wingPromises = wings.map((wing) =>
             fetch(
-              `https://stock-management-system-server-tmxv.onrender.com/api/flats/flats-by-wings/${wing._id}`
+              `https://stock-management-system-server-6mja.onrender.com/api/flats/flats-by-wings/${wing._id}`
             )
               .then((response) => {
                 if (!response.ok) {
@@ -138,7 +138,7 @@ const ManageTenants = ({ navigation }) => {
 
     try {
       const response = await fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${selectedTenant._id}`,
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${selectedTenant._id}`,
         {
           method: "PUT",
           headers: {
@@ -184,7 +184,7 @@ const ManageTenants = ({ navigation }) => {
 
     try {
       const response = await fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${selectedTenant._id}`,
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/${selectedTenant._id}`,
         {
           method: "DELETE",
         }

@@ -22,7 +22,7 @@ const LoginScreen = ({ navigation }) => {
 
     try {
       // Send a POST request to the server with user data
-      const response = await axios.post("https://stock-management-system-server-tmxv.onrender.com/api/login/main", userData);
+      const response = await axios.post("https://stock-management-system-server-6mja.onrender.com/api/login/main", userData);
 
       console.log(response.data); // For debugging: Show the response in the console
 
@@ -37,6 +37,7 @@ const LoginScreen = ({ navigation }) => {
       console.error("Error during login:", error);
       Alert.alert("Login Error", "An error occurred during login. Please try again.");
     }
+  
   };
   return (
     <View style={styles.container}>

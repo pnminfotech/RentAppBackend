@@ -21,7 +21,7 @@ const Totalbuildings = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => response.json())
       .then((data) => setBuildingsData(data))
@@ -42,7 +42,7 @@ const Totalbuildings = ({ navigation }) => {
     };
 
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies",
+      "https://stock-management-system-server-6mja.onrender.com/api/societies",
       {
         method: "POST",
         headers: {

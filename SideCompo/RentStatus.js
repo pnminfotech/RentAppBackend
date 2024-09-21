@@ -20,7 +20,7 @@ const RentStatus = () => {
 
   const fetchActiveTenants = () => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/tenants?tenant_status=Active&rentPaid=false"
+      "https://stock-management-system-server-6mja.onrender.com/api/tenants?tenant_status=Active&rentPaid=false"
     )
       .then((response) => response.json())
       .then((data) => {
@@ -39,7 +39,7 @@ const RentStatus = () => {
 
   const updateRentPaidStatus = (tenantId, status) => {
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/tenants/${tenantId}/rent-paid`,
+      `https://stock-management-system-server-6mja.onrender.com/api/tenants/${tenantId}/rent-paid`,
       {
         method: "PUT",
         headers: {

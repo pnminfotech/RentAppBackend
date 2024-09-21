@@ -10,7 +10,7 @@ const Pendingstatus = () => {
     const fetchRentPendingTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
+          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"
         );
 
         if (!response.ok) {

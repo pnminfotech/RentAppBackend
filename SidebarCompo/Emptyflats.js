@@ -19,7 +19,7 @@ const FlatsOnRentScreen = () => {
     const fetchVacantFlats = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"
+          "https://stock-management-system-server-6mja.onrender.com/api/flats/vaccant"
         );
         
         // Check if the response is ok

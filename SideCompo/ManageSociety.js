@@ -23,7 +23,7 @@ const Totalbuildings = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => response.json())
       .then((data) => setBuildingsData(data))
@@ -44,8 +44,8 @@ const Totalbuildings = ({ navigation }) => {
     };
 
     const url = selectedBuilding
-      ? `https://stock-management-system-server-tmxv.onrender.com/api/societies/${selectedBuilding._id}`
-      : "https://stock-management-system-server-tmxv.onrender.com/api/societies";
+      ? `https://stock-management-system-server-6mja.onrender.com/api/societies/${selectedBuilding._id}`
+      : "https://stock-management-system-server-6mja.onrender.com/api/societies";
 
     const method = selectedBuilding ? "PUT" : "POST";
 
@@ -88,7 +88,7 @@ const Totalbuildings = ({ navigation }) => {
 
   const handleDeleteSociety = () => {
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/societies/${selectedBuilding._id}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/societies/${selectedBuilding._id}`,
       {
         method: "DELETE",
       }

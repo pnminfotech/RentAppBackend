@@ -54,7 +54,7 @@ const HomeScreen = () => {
     const fetchRentPendingTenants = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"
+          "https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"
         );
 
         if (!response.ok) {
@@ -95,13 +95,13 @@ const HomeScreen = () => {
           rentPendingResponse,
           tenantsResponse,
         ] = await Promise.all([
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/societies/count"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/count"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/on-rent"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/flats/vaccant"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-received"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants/rent-pending"),
-          fetch("https://stock-management-system-server-tmxv.onrender.com/api/tenants")
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/societies/count"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/count"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/on-rent"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/flats/vaccant"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-received"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants/rent-pending"),
+          fetch("https://stock-management-system-server-6mja.onrender.com/api/tenants")
         ]);
   
         const societiesData = await societiesResponse.json();
@@ -304,7 +304,7 @@ const HomeScreen = () => {
             style={{ marginRight: 10 }}
           />
         </TouchableOpacity>
-        <Text style={styles.heading}>Hi Akshata,</Text>
+        <Text style={styles.heading}>RENT TRACKER</Text>
         <TouchableOpacity onPress={toggleBellSidebar}>
           <BellIcon color="black" size={30} />
         </TouchableOpacity>

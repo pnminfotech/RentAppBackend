@@ -16,7 +16,7 @@ const FlatsOnRentScreen = () => {
     const fetchAllottedFlats = async () => {
       try {
         const response = await fetch(
-          "https://stock-management-system-server-tmxv.onrender.com/api/flats/allotted"
+          "https://stock-management-system-server-6mja.onrender.com/api/flats/allotted"
         );
         const flatsData = await response.json();
         console.log("Fetched allotted flats:", flatsData);

@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 
-const API_URL = "https://stock-management-system-server-tmxv.onrender.com";
+const API_URL = "https://stock-management-system-server-6mja.onrender.com";
 
 export default function Userdetails({ route }) {
   const { flatId } = route.params;
@@ -39,7 +39,7 @@ export default function Userdetails({ route }) {
   const fetchTenants = async () => {
     try {
       const response = await fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/tenants-by-flat/${flatId}`
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/tenants-by-flat/${flatId}`
       );
       const data = await response.json();
       if (Array.isArray(data)) {
@@ -229,7 +229,7 @@ export default function Userdetails({ route }) {
         // Mark tenant rent as paid
         try {
           await axios.patch(
-            `https://stock-management-system-server-tmxv.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
+            `https://stock-management-system-server-6mja.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
             { rent_status: "Paid" }
           );
           setTenants(
@@ -246,7 +246,7 @@ export default function Userdetails({ route }) {
         // Deactivate tenant
         try {
           await axios.patch(
-            `https://stock-management-system-server-tmxv.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
+            `https://stock-management-system-server-6mja.onrender.com/api/tenants/update-rent-status/${selectedTenant._id}`,
             { rent_status: "Deactive" }
           );
           setTenants(
@@ -354,7 +354,7 @@ export default function Userdetails({ route }) {
       appendFileToFormData(panPhotoUri, "pan_photo");
       appendFileToFormData(electricityBillUri, "electricity_bill");
       const response = await fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/tenants/add-tenant-by-flat/${flatId}`,
+        `https://stock-management-system-server-6mja.onrender.com/api/tenants/add-tenant-by-flat/${flatId}`,
         {
           method: "POST",
           body: formData,

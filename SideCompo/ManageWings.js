@@ -30,7 +30,7 @@ const ManageWings = ({ navigation }) => {
 
   const fetchSocieties = () => {
     fetch(
-      "https://stock-management-system-server-tmxv.onrender.com/api/societies"
+      "https://stock-management-system-server-6mja.onrender.com/api/societies"
     )
       .then((response) => {
         if (!response.ok) {
@@ -53,7 +53,7 @@ const ManageWings = ({ navigation }) => {
     setLoadingWings(true);
     const fetchPromises = societies.map((society) =>
       fetch(
-        `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${society._id}`
+        `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${society._id}`
       )
         .then((response) => {
           if (!response.ok) {
@@ -83,7 +83,7 @@ const ManageWings = ({ navigation }) => {
 
   const addWing = () => {
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/add-wing-by-society/${selectedBuilding._id}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/add-wing-by-society/${selectedBuilding._id}`,
       {
         method: "POST",
         headers: {
@@ -111,7 +111,7 @@ const ManageWings = ({ navigation }) => {
   const fetchWingsForSociety = (societyId) => {
     setLoadingWings(true);
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/wings-by-society/${societyId}`
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/wings-by-society/${societyId}`
     )
       .then((response) => {
         if (!response.ok) {
@@ -149,7 +149,7 @@ const ManageWings = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/${selectedWing.wingId}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/${selectedWing.wingId}`,
       {
         method: "PUT",
         headers: {
@@ -193,7 +193,7 @@ const ManageWings = ({ navigation }) => {
     }
 
     fetch(
-      `https://stock-management-system-server-tmxv.onrender.com/api/wings/${selectedWing.wingId}`,
+      `https://stock-management-system-server-6mja.onrender.com/api/wings/${selectedWing.wingId}`,
       {
         method: "DELETE",
       }
