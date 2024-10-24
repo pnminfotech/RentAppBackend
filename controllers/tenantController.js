@@ -363,12 +363,15 @@ exports.deactiveTenant = async (req, res) => {
 exports.rentStatusChange = async (req, res) => {
   try {
     const tenantId = req.params.id;
-    const { rent_status } = req.body;
+    const { rent_status, ph_no, rent_form_date } = req.body;
 
     // Find the tenant by ID and update their rent_status
     const updatedTenant = await Tenant.findByIdAndUpdate(
       tenantId,
-      { rent_status },
+      { rent_status ,
+        ph_no, 
+        rent_form_date 
+      },
       { new: true }
     );
 
