@@ -279,7 +279,11 @@ const HomeScreen = () => {
     }
   };
 
+  const formatDate = (dateString) => {
+    return dateString.split('T')[0];  // Splits the string at 'T' and takes the first part (the date)
+  };
   const renderItem = ({ item }) => (
+   
     <View style={styles.tenantItem}>
       <Image
         source={
@@ -291,7 +295,9 @@ const HomeScreen = () => {
       />
       <Text style={styles.tenantName}>{item.name}</Text>
       <Text style={styles.tenantRentStatus}>Details: {item.rent_status}</Text>
+      <Text style={styles.tenantRentStatus}>{formatDate(item.rent_form_date)}</Text>
     </View>
+   
   );
 
   return (
@@ -424,6 +430,7 @@ const HomeScreen = () => {
             Notifications
           </Text>
         </View>
+        <ScrollView>
         <View style={styles.container}>
           <FlatList
             data={rentPendingTenants}
@@ -431,6 +438,7 @@ const HomeScreen = () => {
             keyExtractor={(item) => item._id}
           />
         </View>
+        </ScrollView>
       </Animated.View>
 
       <ScrollView contentContainerStyle={styles.container}>

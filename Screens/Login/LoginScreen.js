@@ -79,11 +79,14 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
     marginBottom: 10,
-    backgroundColor: "#f0f0f0",
+
     borderRadius: 5,
     borderWidth: 1,
     borderColor: "#ccc",
+    color: '#333333', // Change to your chosen dark color
+    backgroundColor: '#F0F0F0', // Keep the background as is
   },
+
   loginButton: {
     width: "100%",
     backgroundColor: "#1e90ff",

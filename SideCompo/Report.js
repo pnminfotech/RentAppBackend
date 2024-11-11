@@ -384,32 +384,35 @@ const Report = ({ navigation }) => {
                   {/* Flat Section */}
                   {wing.flats && wing.flats.length > 0 ? (
                     wing.flats.map((flat) => (
-                      <View key={flat._id} style={styles.flatContainer}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            toggleFlatExpansion(flat._id);
-                            fetchTenantsForFlat(flat._id);
-                          }}
-                          style={styles.flatContent}
-                        >
-                          <Image
-                            source={require("../assets/images/flats.jpg")}
-                            style={styles.flatImage}
-                          />
-                          <Text style={styles.flatName}>
-                            {flat.name} {flat.flat_type}
-                          </Text>
-                        </TouchableOpacity>
+                      <View key={flat._id}>
+                        <View style={styles.flatContainer}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              toggleFlatExpansion(flat._id);
+                              fetchTenantsForFlat(flat._id);
+                            }}
+                            style={styles.flatContent}
+                          >
+                            <Image
+                              source={require("../assets/images/flats.jpg")}
+                              style={styles.flatImage}
+                            />
+                            <Text style={styles.flatName}>
+                              {flat.name} {flat.flat_type}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
 
+                        {/* Render tenantBox outside of flatContainer for better separation */}
                         {expandedFlat === flat._id && (
-                          <View style={styles.tenantBox}>
+                          <View  style={styles.tenantBox}>
                             {renderTenants(flat._id)}
                           </View>
                         )}
                       </View>
                     ))
                   ) : (
-                    <Text>No flats available</Text>
+                    <Text style={styles.noFlatsText}>No flats available</Text>
                   )}
                 </View>
               )}
@@ -420,6 +423,7 @@ const Report = ({ navigation }) => {
     </View>
   ))}
 </ScrollView>
+
 
     </View>
   );
@@ -648,6 +652,21 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#FFF",
     fontWeight: "bold",
+  },
+  tenantBox: {
+    marginTop: 0, // Add separation from flatContainer
+    marginBottom:20,
+    padding: 20,
+    marginLeft:15,
+    backgroundColor: "#FFF",
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 3,
+    elevation: 3,
   },
 });
 

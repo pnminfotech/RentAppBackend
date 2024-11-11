@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 
 const ManageTenants = ({ navigation }) => {
   const [tenantsByFlat, setTenantsByFlat] = useState({});
@@ -133,6 +134,11 @@ const ManageTenants = ({ navigation }) => {
     setDeleteModalVisible(true);
   };
 
+
+  const formatDate = (dateString) => {
+    return dateString.split('T')[0];  // Splits the string at 'T' and takes the first part (the date)
+  };
+
   const updateTenantDetails = async () => {
     if (!selectedTenant) return;
 
@@ -210,7 +216,6 @@ const ManageTenants = ({ navigation }) => {
       console.error("Error deleting tenant:", error);
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Manage Tenants</Text>
@@ -350,18 +355,22 @@ const ManageTenants = ({ navigation }) => {
                 setSelectedTenant({ ...selectedTenant, ph_no: text })
               }
             />
+            <View style={styles.pickerContainer}>
+            <Picker
+  style={styles.input}
+  selectedValue={selectedTenant?.rent_status} // Fetch the default value from the backend
+  onValueChange={(itemValue) =>
+    setSelectedTenant({ ...selectedTenant, rent_status: itemValue }) // Update value on selection
+  }
+>
+  <Picker.Item label="paid" value="paid" />
+  <Picker.Item label="pending" value="pending" />
+</Picker>
+</View>
             <TextInput
               style={styles.input}
-              placeholder="rent status"
-              value={selectedTenant?.rent_status}
-              onChangeText={(text) =>
-                setSelectedTenant({ ...selectedTenant, rent_status: text })
-              }
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="rent status"
-              value={selectedTenant?.rent_form_date}
+              placeholder="rent date"
+              value={selectedTenant?.rent_form_date ? selectedTenant.rent_form_date.split('T')[0] : ''} // Extract YYYY-MM-DD
               onChangeText={(text) =>
                 setSelectedTenant({ ...selectedTenant, rent_form_date: text })
               }
@@ -469,6 +478,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
   tenantListingContainer: {
     marginVertical: 10,
   },
@@ -519,6 +529,19 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     marginBottom: 20,
+  },
+  pickerContainer: {
+    borderWidth: 1,            // Width of the border
+    borderColor: '#ccc',      // Color of the border
+    borderRadius: 5,  
+    marginBottom: 20,
+
+    // Rounded corners
+    // marginVertical: 10,       // Add some space around the dropdown
+    // paddingVertical: 0,       // Remove vertical padding
+    // paddingHorizontal: 10,    // Add horizontal padding for the Picker
+    // backgroundColor: 'white',  // Background color of the box
+    width: "100%",
   },
   modalButtons: {
     flexDirection: "row",
