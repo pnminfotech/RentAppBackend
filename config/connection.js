@@ -4,7 +4,7 @@ const { MongoClient } = require("mongodb");
 const connectToMongoDB = async () => {
   try {
     const conn = await mongoose.connect(
-      "mongodb+srv://pnminfotech2024:PnmInfotech2024@atlascluster.2xzg9hj.mongodb.net/"
+      "mongodb+srv://pnminfotech2024:hxkTifGMN732PLKi@rentapp.rnfrr.mongodb.net/?retryWrites=true&w=majority&appName=RentApp"
     );
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
@@ -14,7 +14,7 @@ const connectToMongoDB = async () => {
 };
 
 const client = new MongoClient(
-  "mongodb+srv://pnminfotech2024:PnmInfotech2024@atlascluster.2xzg9hj.mongodb.net/"
+  "mongodb+srv://pnminfotech2024:hxkTifGMN732PLKi@rentapp.rnfrr.mongodb.net/?retryWrites=true&w=majority&appName=RentApp"
 );
 
 module.exports = { connectToMongoDB, client };
