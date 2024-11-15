@@ -1,5 +1,6 @@
-const express = require("express");
 require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose"); // Add this line
 const cors = require("cors");
 const { connectToMongoDB } = require("./config/connection");
 const routes = require("./routes");
@@ -25,6 +26,7 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 connectToMongoDB();
+
 
 app.use("/api/", routes);
 

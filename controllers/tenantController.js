@@ -96,14 +96,14 @@ exports.createTenant = async (req, res) => {
       working_address,
       work_ph_no,
       family_members,
-      male_members,
-      female_members,
-      childs,
-      family_member_names,
-      reference_person1,
-      reference_person2,
-      reference_person1_age,
-      reference_person2_age,
+      // male_members,
+      // female_members,
+      // childs,
+      // family_member_names,
+      // reference_person1,
+      // reference_person2,
+      // reference_person1_age,
+      // reference_person2_age,
       agent_name,
       rent_status,
       active,
@@ -149,14 +149,14 @@ exports.createTenant = async (req, res) => {
       working_address,
       work_ph_no,
       family_members,
-      male_members,
-      female_members,
-      childs,
-      family_member_names,
-      reference_person1,
-      reference_person2,
-      reference_person1_age,
-      reference_person2_age,
+      // male_members,
+      // female_members,
+      // childs,
+      // family_members,
+      // reference_person1,
+      // reference_person2,
+      // reference_person1_age,
+      // reference_person2_age,
       agent_name,
       rent_status,
       flat_id: req.params.id,
@@ -222,19 +222,19 @@ exports.updateTenant = async (req, res) => {
         req.body.working_address || tenant.working_address;
       tenant.work_ph_no = req.body.work_ph_no || tenant.work_ph_no;
       tenant.family_members = req.body.family_members || tenant.family_members;
-      tenant.male_members = req.body.male_members || tenant.male_members;
-      tenant.female_members = req.body.female_members || tenant.female_members;
-      tenant.childs = req.body.childs || tenant.childs;
-      tenant.family_member_names =
-        req.body.family_member_names || tenant.family_member_names;
-      tenant.reference_person1 =
-        req.body.reference_person1 || tenant.reference_person1;
-      tenant.reference_person2 =
-        req.body.reference_person2 || tenant.reference_person2;
-      tenant.reference_person1_age =
-        req.body.reference_person1_age || tenant.reference_person1_age;
-      tenant.reference_person2_age =
-        req.body.reference_person2_age || tenant.reference_person2_age;
+      // tenant.male_members = req.body.male_members || tenant.male_members;
+      // tenant.female_members = req.body.female_members || tenant.female_members;
+      // tenant.childs = req.body.childs || tenant.childs;
+      // tenant.family_member_names =
+      //   req.body.family_member_names || tenant.family_member_names;
+      // tenant.reference_person1 =
+      //   req.body.reference_person1 || tenant.reference_person1;
+      // tenant.reference_person2 =
+      //   req.body.reference_person2 || tenant.reference_person2;
+      // tenant.reference_person1_age =
+      //   req.body.reference_person1_age || tenant.reference_person1_age;
+      // tenant.reference_person2_age =
+      //   req.body.reference_person2_age || tenant.reference_person2_age;
       tenant.agent_name = req.body.agent_name || tenant.agent_name;
       tenant.flat_id = req.body.flat_id || tenant.flat_id;
       tenant.rent_status = req.body.rent_status || tenant.rent_status;
