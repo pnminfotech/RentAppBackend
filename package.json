@@ -1,5 +1,5 @@
 {
-<<<<<<< HEAD
+
   "name": "server",
   "version": "1.0.0",
   "description": "backend server for stock management system",
@@ -31,7 +31,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.13"
   }
-=======
+
   "name": "rentadmin",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
@@ -94,5 +94,5 @@
   "author": "",
   "license": "ISC",
   "description": ""
->>>>>>> fe73f7d1e791af10b16daa07eab5c1b8d112272d
+
 }
